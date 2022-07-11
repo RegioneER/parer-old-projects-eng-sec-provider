@@ -6,9 +6,36 @@
 	<name>sec-provider</name>
 	<description>Enginnering security provider</description>
     <scm>
-        <developerConnection>scm:git:git@gitlab.ente.regione.emr.it:parer/old-projects-eng-sec-provider.git</developerConnection>
+        <developerConnection>scm:git:https://github.com/RegioneER/parer.sacer.sec-provider.git</developerConnection>
         <tag>HEAD</tag>
     </scm>
+
+	<distributionManagement>
+        <repository>
+          <id>github</id>
+          <url>https://maven.pkg.github.com/RegioneER/parer.sacer.sec-provider</url>
+        </repository>        
+    </distributionManagement>
+
+	<repositories>
+        <repository>
+            <id>github</id>
+            <url>https://maven.pkg.github.com/RegioneER/parer.sacer.parent/</url>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+                <updatePolicy>never</updatePolicy>
+            </snapshots>
+        </repository>
+		<repository>
+			<id>central</id>
+			<url>https://repo1.maven.org/maven2</url>
+		</repository>               
+	</repositories>
+
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
