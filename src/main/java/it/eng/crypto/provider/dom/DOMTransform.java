@@ -134,9 +134,9 @@ public class DOMTransform extends DOMStructure implements Transform {
      * @param sc
      *            the <code>XMLCryptoContext</code> containing additional context (may be <code>null</code> if not
      *            applicable)
-     * 
+     *
      * @return the transformed data
-     * 
+     *
      * @throws NullPointerException
      *             if <code>data</code> is <code>null</code>
      * @throws XMLSignatureException
@@ -156,9 +156,9 @@ public class DOMTransform extends DOMStructure implements Transform {
      *            applicable)
      * @param os
      *            the <code>OutputStream</code> that should be used to write the transformed data to
-     * 
+     *
      * @return the transformed data
-     * 
+     *
      * @throws NullPointerException
      *             if <code>data</code> is <code>null</code>
      * @throws XMLSignatureException
@@ -198,9 +198,9 @@ public class DOMTransform extends DOMStructure implements Transform {
      *            applicable)
      * @param context
      *            the marshalling context
-     * 
+     *
      * @return the transformed data
-     * 
+     *
      * @throws MarshalException
      *             if an exception occurs while marshalling
      * @throws NullPointerException

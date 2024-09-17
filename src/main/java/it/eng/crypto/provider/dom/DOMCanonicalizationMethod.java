@@ -86,9 +86,9 @@ public class DOMCanonicalizationMethod extends DOMTransform implements Canonical
      * @param xc
      *            the <code>XMLCryptoContext</code> containing additional context (may be <code>null</code> if not
      *            applicable)
-     * 
+     *
      * @return the canonicalized data
-     * 
+     *
      * @throws NullPointerException
      *             if <code>data</code> is <code>null</code>
      * @throws TransformException

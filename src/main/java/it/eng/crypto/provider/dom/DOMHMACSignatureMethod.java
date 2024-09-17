@@ -77,7 +77,7 @@ public abstract class DOMHMACSignatureMethod extends DOMSignatureMethod {
      *
      * @param params
      *            algorithm-specific parameters (may be <code>null</code>)
-     * 
+     *
      * @throws InvalidAlgorithmParameterException
      *             if params are inappropriate
      */

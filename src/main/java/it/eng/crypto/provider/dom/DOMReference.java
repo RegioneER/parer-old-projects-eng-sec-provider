@@ -35,7 +35,7 @@
  * Portions copyright 2005 Sun Microsystems, Inc. All rights reserved.
  */
 /*
- * =========================================================================== 
+ * ===========================================================================
  *
  * (C) Copyright IBM Corp. 2003 All Rights Reserved.
  *
@@ -124,9 +124,9 @@ public final class DOMReference extends DOMStructure implements Reference, DOMUR
      *            modification. May be <code>null</code> or empty.
      * @param id
      *            the reference ID (may be <code>null</code>)
-     * 
+     *
      * @return a <code>Reference</code>
-     * 
+     *
      * @throws NullPointerException
      *             if <code>dm</code> is <code>null</code>
      * @throws ClassCastException

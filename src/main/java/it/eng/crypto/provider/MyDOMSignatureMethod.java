@@ -68,7 +68,7 @@ import org.jcp.xml.dsig.internal.dom.DOMUtils;
 
 /**
  * DOM-based abstract implementation of SignatureMethod.
- * 
+ *
  * @author Sean Mullan
  */
 public abstract class MyDOMSignatureMethod extends DOMStructure implements SignatureMethod {
@@ -89,10 +89,10 @@ public abstract class MyDOMSignatureMethod extends DOMStructure implements Signa
 
     /**
      * Creates a <code>DOMSignatureMethod</code>.
-     * 
+     *
      * @param params
      *            the algorithm-specific params (may be <code>null</code>)
-     * 
+     *
      * @throws InvalidAlgorithmParameterException
      *             if the parameters are not appropriate for this signature method
      */
@@ -107,7 +107,7 @@ public abstract class MyDOMSignatureMethod extends DOMStructure implements Signa
     /**
      * Creates a <code>DOMSignatureMethod</code> from an element. This ctor invokes the abstract {@link #unmarshalParams
      * unmarshalParams} method to unmarshal any algorithm-specific input parameters.
-     * 
+     *
      * @param smElem
      *            a SignatureMethod element
      */
@@ -144,10 +144,10 @@ public abstract class MyDOMSignatureMethod extends DOMStructure implements Signa
      * Checks if the specified parameters are valid for this algorithm. By default, this method throws an exception if
      * parameters are specified since most SignatureMethod algorithms do not have parameters. Subclasses should override
      * it if they have parameters.
-     * 
+     *
      * @param params
      *            the algorithm-specific params (may be <code>null</code>)
-     * 
+     *
      * @throws InvalidAlgorithmParameterException
      *             if the parameters are not appropriate for this signature method
      */
@@ -166,12 +166,12 @@ public abstract class MyDOMSignatureMethod extends DOMStructure implements Signa
      * Unmarshals <code>SignatureMethodParameterSpec</code> from the specified <code>Element</code>. By default, this
      * method throws an exception since most SignatureMethod algorithms do not have parameters. Subclasses should
      * override it if they have parameters.
-     * 
+     *
      * @param paramsElem
      *            the <code>Element</code> holding the input params
-     * 
+     *
      * @return the algorithm-specific <code>SignatureMethodParameterSpec</code>
-     * 
+     *
      * @throws MarshalException
      *             if the parameters cannot be unmarshalled
      */
@@ -199,7 +199,7 @@ public abstract class MyDOMSignatureMethod extends DOMStructure implements Signa
 
     /**
      * Verifies the passed-in signature with the specified key, using the underlying signature or MAC algorithm.
-     * 
+     *
      * @param key
      *            the verification key
      * @param si
@@ -208,9 +208,9 @@ public abstract class MyDOMSignatureMethod extends DOMStructure implements Signa
      *            the signature bytes to be verified
      * @param context
      *            the XMLValidateContext
-     * 
+     *
      * @return <code>true</code> if the signature verified successfully, <code>false</code> if not
-     * 
+     *
      * @throws NullPointerException
      *             if <code>key</code>, <code>si</code> or <code>signature</code> are <code>null</code>
      * @throws InvalidKeyException
@@ -258,16 +258,16 @@ public abstract class MyDOMSignatureMethod extends DOMStructure implements Signa
 
     /**
      * Signs the bytes with the specified key, using the underlying signature or MAC algorithm.
-     * 
+     *
      * @param key
      *            the signing key
      * @param si
      *            the DOMSignedInfo
      * @param context
      *            the XMLSignContext
-     * 
+     *
      * @return the signature
-     * 
+     *
      * @throws NullPointerException
      *             if <code>key</code> or <code>si</code> are <code>null</code>
      * @throws InvalidKeyException
@@ -317,12 +317,12 @@ public abstract class MyDOMSignatureMethod extends DOMStructure implements Signa
      * Marshals the algorithm-specific parameters to an Element and appends it to the specified parent element. By
      * default, this method throws an exception since most SignatureMethod algorithms do not have parameters. Subclasses
      * should override it if they have parameters.
-     * 
+     *
      * @param parent
      *            the parent element to append the parameters to
      * @param paramsPrefix
      *            the algorithm parameters prefix to use
-     * 
+     *
      * @throws MarshalException
      *             if the parameters cannot be marshalled
      */
@@ -338,7 +338,7 @@ public abstract class MyDOMSignatureMethod extends DOMStructure implements Signa
 
     /**
      * Returns true if parameters are equal; false otherwise.
-     * 
+     *
      * Subclasses should override this method to compare algorithm-specific parameters.
      */
     boolean paramsEqual(AlgorithmParameterSpec spec) {
@@ -360,14 +360,14 @@ public abstract class MyDOMSignatureMethod extends DOMStructure implements Signa
 
     /**
      * Converts an ASN.1 DSA value to a XML Signature DSA Value.
-     * 
+     *
      * The JAVA JCE DSA Signature algorithm creates ASN.1 encoded (r,s) value pairs; the XML Signature requires the core
      * BigInteger values.
-     * 
+     *
      * @param asn1Bytes
-     * 
+     *
      * @throws IOException
-     * 
+     *
      * @see <A HREF="http://www.w3.org/TR/xmldsig-core/#dsa-sha1">6.4.1 DSA</A>
      */
     private static byte[] convertASN1toXMLDSIG(byte asn1Bytes[]) throws IOException {
@@ -400,14 +400,14 @@ public abstract class MyDOMSignatureMethod extends DOMStructure implements Signa
 
     /**
      * Converts a XML Signature DSA Value to an ASN.1 DSA value.
-     * 
+     *
      * The JAVA JCE DSA Signature algorithm creates ASN.1 encoded (r,s) value pairs; the XML Signature requires the core
      * BigInteger values.
-     * 
+     *
      * @param xmldsigBytes
-     * 
+     *
      * @throws IOException
-     * 
+     *
      * @see <A HREF="http://www.w3.org/TR/xmldsig-core/#dsa-sha1">6.4.1 DSA</A>
      */
     private static byte[] convertXMLDSIGtoASN1(byte xmldsigBytes[]) throws IOException {

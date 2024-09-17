@@ -35,7 +35,7 @@
  * Portions copyright 2005 Sun Microsystems, Inc. All rights reserved.
  */
 /*
- * =========================================================================== 
+ * ===========================================================================
  *
  * (C) Copyright IBM Corp. 2003 All Rights Reserved.
  *
@@ -85,7 +85,7 @@ public final class DOMRetrievalMethod extends DOMStructure implements RetrievalM
      * @param transforms
      *            a list of {@link Transform}s. The list is defensively copied to prevent subsequent modification. May
      *            be <code>null</code> or empty.
-     * 
+     *
      * @throws IllegalArgumentException
      *             if the format of <code>uri</code> is invalid, as specified by Reference's URI attribute in the W3C
      *             specification for XML-Signature Syntax and Processing

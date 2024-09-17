@@ -2,15 +2,16 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>it.eng.parer</groupId>
 	<artifactId>eng-sec-provider</artifactId>
-	<version>1.0.1-SNAPSHOT</version>
+	<version>1.1.1-SNAPSHOT</version>
 	<name>sec-provider</name>
 	<description>Enginnering security provider</description>
 	<parent>
 		<groupId>it.eng.parer</groupId>
 		<artifactId>parer-pom</artifactId>
-		<version>4.2.0</version>
+		<version>6.4.0</version>
 	</parent>
-    <scm>
+
+	<scm>
         <developerConnection>scm:git:https://github.com/RegioneER/parer-old-projects-eng-sec-provider.git</developerConnection>
         <tag>HEAD</tag>
     </scm>
@@ -43,6 +44,27 @@
 			<artifactId>bcprov-jdk16</artifactId>
 			<version>1.46</version>
 		</dependency>
-
 	</dependencies>
+
+	<build>
+        <pluginManagement>
+            <plugins>               
+                <plugin>
+                    <groupId>net.revelc.code.formatter</groupId>
+                    <artifactId>formatter-maven-plugin</artifactId>
+                    <version>2.16.0</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<target>1.8</target>
+					<source>1.8</source>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 </project>

@@ -77,7 +77,7 @@ public final class Utils {
      *
      * @param i
      *            the Iterator
-     * 
+     *
      * @return the Set of Nodes
      */
     static Set toNodeSet(Iterator i) {

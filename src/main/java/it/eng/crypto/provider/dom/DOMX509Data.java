@@ -75,9 +75,9 @@ public final class DOMX509Data extends DOMStructure implements X509Data {
      *            <code>byte[]</code> (subject key ids), {@link java.security.cert.X509Certificate}, {@link X509CRL}, or
      *            {@link javax.xml.dsig.XMLStructure} ({@link X509IssuerSerial} objects or elements from an external
      *            namespace). The list is defensively copied to protect against subsequent modification.
-     * 
+     *
      * @return a <code>X509Data</code>
-     * 
+     *
      * @throws NullPointerException
      *             if <code>content</code> is <code>null</code>
      * @throws IllegalArgumentException
@@ -110,7 +110,7 @@ public final class DOMX509Data extends DOMStructure implements X509Data {
      *
      * @param xdElem
      *            an X509Data element
-     * 
+     *
      * @throws MarshalException
      *             if there is an error while unmarshalling
      */

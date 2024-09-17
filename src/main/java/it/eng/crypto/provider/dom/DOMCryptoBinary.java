@@ -52,7 +52,7 @@ import org.apache.xml.security.utils.Base64;
  * XML-Signature Syntax and Processing. The XML Schema Definition is defined as:
  *
  * <xmp> <simpleType name="CryptoBinary"> <restriction base = "base64Binary"> </restriction> </simpleType> </xmp>
- * 
+ *
  * @author Sean Mullan
  */
 public final class DOMCryptoBinary extends DOMStructure {
@@ -65,7 +65,7 @@ public final class DOMCryptoBinary extends DOMStructure {
      *
      * @param bigNum
      *            the arbitrary-length integer
-     * 
+     *
      * @throws NullPointerException
      *             if <code>bigNum</code> is <code>null</code>
      */
@@ -83,7 +83,7 @@ public final class DOMCryptoBinary extends DOMStructure {
      *
      * @param cbNode
      *            a CryptoBinary text node
-     * 
+     *
      * @throws MarshalException
      *             if value cannot be decoded (invalid format)
      */

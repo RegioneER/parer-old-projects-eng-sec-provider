@@ -68,7 +68,7 @@ public final class DOMX509IssuerSerial extends DOMStructure implements X509Issue
      *            the X.509 issuer distinguished name in RFC 2253 String format
      * @param serialNumber
      *            the serial number
-     * 
+     *
      * @throws IllegalArgumentException
      *             if the format of <code>issuerName</code> is not RFC 2253 compliant
      * @throws NullPointerException

@@ -68,7 +68,7 @@ public final class DOMManifest extends DOMStructure implements Manifest {
      *            subsequent modification.
      * @param id
      *            the id (may be <code>null</code>
-     * 
+     *
      * @throws NullPointerException
      *             if <code>references</code> is <code>null</code>
      * @throws IllegalArgumentException

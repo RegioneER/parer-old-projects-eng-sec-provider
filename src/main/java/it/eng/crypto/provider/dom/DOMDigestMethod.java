@@ -66,7 +66,7 @@ public abstract class DOMDigestMethod extends DOMStructure implements DigestMeth
      *
      * @param params
      *            the algorithm-specific params (may be <code>null</code>)
-     * 
+     *
      * @throws InvalidAlgorithmParameterException
      *             if the parameters are not appropriate for this digest method
      */
@@ -119,7 +119,7 @@ public abstract class DOMDigestMethod extends DOMStructure implements DigestMeth
      *
      * @param params
      *            the algorithm-specific params (may be <code>null</code>)
-     * 
+     *
      * @throws InvalidAlgorithmParameterException
      *             if the parameters are not appropriate for this digest method
      */
@@ -141,9 +141,9 @@ public abstract class DOMDigestMethod extends DOMStructure implements DigestMeth
      *
      * @param paramsElem
      *            the <code>Element</code> holding the input params
-     * 
+     *
      * @return the algorithm-specific <code>DigestMethodParameterSpec</code>
-     * 
+     *
      * @throws MarshalException
      *             if the parameters cannot be unmarshalled
      */
@@ -198,7 +198,7 @@ public abstract class DOMDigestMethod extends DOMStructure implements DigestMeth
      *            the parent element to append the parameters to
      * @param the
      *            namespace prefix to use
-     * 
+     *
      * @throws MarshalException
      *             if the parameters cannot be marshalled
      */

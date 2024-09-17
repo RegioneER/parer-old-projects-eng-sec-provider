@@ -68,9 +68,9 @@ public final class DOMSignatureProperties extends DOMStructure implements Signat
      *            subsequent modification.
      * @param id
      *            the Id (may be <code>null</code>)
-     * 
+     *
      * @return a <code>DOMSignatureProperties</code>
-     * 
+     *
      * @throws ClassCastException
      *             if <code>properties</code> contains any entries that are not of type {@link SignatureProperty}
      * @throws IllegalArgumentException
@@ -100,7 +100,7 @@ public final class DOMSignatureProperties extends DOMStructure implements Signat
      *
      * @param propsElem
      *            a SignatureProperties element
-     * 
+     *
      * @throws MarshalException
      *             if a marshalling error occurs
      */

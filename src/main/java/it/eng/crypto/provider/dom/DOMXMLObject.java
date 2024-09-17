@@ -75,9 +75,9 @@ public final class DOMXMLObject extends DOMStructure implements XMLObject {
      *            the mime type (may be <code>null</code>)
      * @param encoding
      *            the encoding (may be <code>null</code>)
-     * 
+     *
      * @return an <code>XMLObject</code>
-     * 
+     *
      * @throws ClassCastException
      *             if <code>content</code> contains any entries that are not of type {@link XMLStructure}
      */
@@ -103,7 +103,7 @@ public final class DOMXMLObject extends DOMStructure implements XMLObject {
      *
      * @param objElem
      *            an Object element
-     * 
+     *
      * @throws MarshalException
      *             if there is an error when unmarshalling
      */

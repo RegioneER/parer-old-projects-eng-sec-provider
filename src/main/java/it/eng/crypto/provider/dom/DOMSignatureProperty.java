@@ -71,9 +71,9 @@ public final class DOMSignatureProperty extends DOMStructure implements Signatur
      *            the target URI
      * @param id
      *            the Id (may be <code>null</code>)
-     * 
+     *
      * @return a <code>SignatureProperty</code>
-     * 
+     *
      * @throws ClassCastException
      *             if <code>content</code> contains any entries that are not of type {@link XMLStructure}
      * @throws IllegalArgumentException
