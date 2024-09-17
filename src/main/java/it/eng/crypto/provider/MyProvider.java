@@ -37,7 +37,7 @@ import java.util.Map;
 public final class MyProvider extends Provider {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 1L;
     private static final String INFO = "MyXMLDSig (DOM XMLSignatureFactory; DOM KeyInfoFactory)";

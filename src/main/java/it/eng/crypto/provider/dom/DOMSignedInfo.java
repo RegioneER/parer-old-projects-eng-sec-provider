@@ -85,7 +85,7 @@ public final class DOMSignedInfo extends DOMStructure implements SignedInfo {
      *            the signature method
      * @param references
      *            the list of references. The list is copied.
-     * 
+     *
      * @throws NullPointerException
      *             if <code>cm</code>, <code>sm</code>, or <code>references</code> is <code>null</code>
      * @throws IllegalArgumentException
@@ -123,7 +123,7 @@ public final class DOMSignedInfo extends DOMStructure implements SignedInfo {
      * @param id
      *            an optional identifer that will allow this <code>SignedInfo</code> to be referenced by other
      *            signatures and objects
-     * 
+     *
      * @throws NullPointerException
      *             if <code>cm</code>, <code>sm</code>, or <code>references</code> is <code>null</code>
      * @throws IllegalArgumentException

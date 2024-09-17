@@ -62,7 +62,7 @@ public final class DOMKeyName extends DOMStructure implements KeyName {
      *
      * @param name
      *            the name of the key identifier
-     * 
+     *
      * @throws NullPointerException
      *             if <code>name</code> is null
      */

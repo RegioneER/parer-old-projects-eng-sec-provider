@@ -70,7 +70,7 @@ public final class DOMKeyInfo extends DOMStructure implements KeyInfo {
      *            defensively copied to protect against subsequent modification.
      * @param id
      *            an ID attribute
-     * 
+     *
      * @throws NullPointerException
      *             if <code>content</code> is <code>null</code>
      * @throws IllegalArgumentException

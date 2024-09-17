@@ -109,7 +109,7 @@ public final class DOMXMLSignature extends DOMStructure implements XMLSignature 
      *            an optional id (specify <code>null</code> to omit)
      * @param signatureValueId
      *            an optional id (specify <code>null</code> to omit)
-     * 
+     *
      * @throws NullPointerException
      *             if <code>si</code> is <code>null</code>
      */
@@ -139,7 +139,7 @@ public final class DOMXMLSignature extends DOMStructure implements XMLSignature 
      *
      * @param sigElem
      *            Signature element
-     * 
+     *
      * @throws MarshalException
      *             if XMLSignature cannot be unmarshalled
      */

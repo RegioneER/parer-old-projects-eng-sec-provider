@@ -80,7 +80,7 @@ public abstract class DOMSignatureMethod extends DOMStructure implements Signatu
      *
      * @param params
      *            the algorithm-specific params (may be <code>null</code>)
-     * 
+     *
      * @throws InvalidAlgorithmParameterException
      *             if the parameters are not appropriate for this signature method
      */
@@ -143,7 +143,7 @@ public abstract class DOMSignatureMethod extends DOMStructure implements Signatu
      *
      * @param params
      *            the algorithm-specific params (may be <code>null</code>)
-     * 
+     *
      * @throws InvalidAlgorithmParameterException
      *             if the parameters are not appropriate for this signature method
      */
@@ -165,9 +165,9 @@ public abstract class DOMSignatureMethod extends DOMStructure implements Signatu
      *
      * @param paramsElem
      *            the <code>Element</code> holding the input params
-     * 
+     *
      * @return the algorithm-specific <code>SignatureMethodParameterSpec</code>
-     * 
+     *
      * @throws MarshalException
      *             if the parameters cannot be unmarshalled
      */
@@ -204,9 +204,9 @@ public abstract class DOMSignatureMethod extends DOMStructure implements Signatu
      *            the signature bytes to be verified
      * @param context
      *            the XMLValidateContext
-     * 
+     *
      * @return <code>true</code> if the signature verified successfully, <code>false</code> if not
-     * 
+     *
      * @throws NullPointerException
      *             if <code>key</code>, <code>si</code> or <code>signature</code> are <code>null</code>
      * @throws InvalidKeyException
@@ -261,9 +261,9 @@ public abstract class DOMSignatureMethod extends DOMStructure implements Signatu
      *            the DOMSignedInfo
      * @param context
      *            the XMLSignContext
-     * 
+     *
      * @return the signature
-     * 
+     *
      * @throws NullPointerException
      *             if <code>key</code> or <code>si</code> are <code>null</code>
      * @throws InvalidKeyException
@@ -318,7 +318,7 @@ public abstract class DOMSignatureMethod extends DOMStructure implements Signatu
      *            the parent element to append the parameters to
      * @param paramsPrefix
      *            the algorithm parameters prefix to use
-     * 
+     *
      * @throws MarshalException
      *             if the parameters cannot be marshalled
      */
@@ -363,7 +363,7 @@ public abstract class DOMSignatureMethod extends DOMStructure implements Signatu
      * @param asn1Bytes
      *
      * @throws IOException
-     * 
+     *
      * @see <A HREF="http://www.w3.org/TR/xmldsig-core/#dsa-sha1">6.4.1 DSA</A>
      */
     private static byte[] convertASN1toXMLDSIG(byte asn1Bytes[]) throws IOException {
@@ -402,7 +402,7 @@ public abstract class DOMSignatureMethod extends DOMStructure implements Signatu
      * @param xmldsigBytes
      *
      * @throws IOException
-     * 
+     *
      * @see <A HREF="http://www.w3.org/TR/xmldsig-core/#dsa-sha1">6.4.1 DSA</A>
      */
     private static byte[] convertXMLDSIGtoASN1(byte xmldsigBytes[]) throws IOException {

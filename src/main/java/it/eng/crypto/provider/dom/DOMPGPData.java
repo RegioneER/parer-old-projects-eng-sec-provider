@@ -73,7 +73,7 @@ public final class DOMPGPData extends DOMStructure implements PGPData {
      * @param other
      *            a list of {@link XMLStructure}s representing elements from an external namespace. The list is
      *            defensively copied to prevent subsequent modification. May be <code>null</code> or empty.
-     * 
+     *
      * @throws NullPointerException
      *             if <code>keyPacket</code> is <code>null</code>
      * @throws IllegalArgumentException
@@ -115,7 +115,7 @@ public final class DOMPGPData extends DOMStructure implements PGPData {
      * @param other
      *            a list of {@link XMLStructure}s representing elements from an external namespace. The list is
      *            defensively copied to prevent subsequent modification. May be <code>null</code> or empty.
-     * 
+     *
      * @throws NullPointerException
      *             if <code>keyId</code> is <code>null</code>
      * @throws IllegalArgumentException

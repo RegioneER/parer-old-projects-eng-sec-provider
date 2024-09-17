@@ -122,7 +122,7 @@ public class DOMSubTreeData implements NodeSetData {
          *
          * @param node
          *            the node (document or element) referenced by the URI fragment. If null, returns an empty set.
-         * 
+         *
          * @return a set of nodes (minus any comment nodes)
          */
         private List dereferenceSameDocumentURI(Node node) {

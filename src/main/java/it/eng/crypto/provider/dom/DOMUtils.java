@@ -68,7 +68,7 @@ public class DOMUtils {
      *
      * @param node
      *            the node
-     * 
+     *
      * @return the owner document
      */
     public static Document getOwnerDocument(Node node) {
@@ -90,7 +90,7 @@ public class DOMUtils {
      *            the namespace URI
      * @param prefix
      *            the namespace prefix
-     * 
+     *
      * @return the newly created element
      */
     public static Element createElement(Document doc, String tag, String nsURI, String prefix) {
@@ -137,9 +137,9 @@ public class DOMUtils {
      *
      * @param node
      *            the node
-     * 
+     *
      * @return the first child element of the specified node, or null if there is no such element
-     * 
+     *
      * @throws NullPointerException
      *             if <code>node == null</code>
      */
@@ -156,9 +156,9 @@ public class DOMUtils {
      *
      * @param node
      *            the node
-     * 
+     *
      * @return the last child element of the specified node, or null if there is no such element
-     * 
+     *
      * @throws NullPointerException
      *             if <code>node == null</code>
      */
@@ -175,9 +175,9 @@ public class DOMUtils {
      *
      * @param node
      *            the node
-     * 
+     *
      * @return the next sibling element of the specified node, or null if there is no such element
-     * 
+     *
      * @throws NullPointerException
      *             if <code>node == null</code>
      */
@@ -201,7 +201,7 @@ public class DOMUtils {
      *            the element containing the attribute
      * @param name
      *            the name of the attribute
-     * 
+     *
      * @return the attribute value (may be null if unspecified)
      */
     public static String getAttributeValue(Element elem, String name) {
@@ -214,7 +214,7 @@ public class DOMUtils {
      *
      * @param nl
      *            the NodeList
-     * 
+     *
      * @return a Set of Nodes
      */
     public static Set nodeSet(NodeList nl) {
@@ -261,7 +261,7 @@ public class DOMUtils {
      *            contains the namespace map
      * @param nsURI
      *            the namespace URI
-     * 
+     *
      * @return the prefix associated with the specified namespace URI, or null if not set
      */
     public static String getNSPrefix(XMLCryptoContext context, String nsURI) {
@@ -277,7 +277,7 @@ public class DOMUtils {
      *
      * @param context
      *            contains the namespace map
-     * 
+     *
      * @return the prefix associated with the specified namespace URI, or null if not set
      */
     public static String getSignaturePrefix(XMLCryptoContext context) {
