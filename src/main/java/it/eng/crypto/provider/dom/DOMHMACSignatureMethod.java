@@ -1,34 +1,28 @@
 /*
  * Engineering Ingegneria Informatica S.p.A.
  *
- * Copyright (C) 2023 Regione Emilia-Romagna
- * <p/>
- * This program is free software: you can redistribute it and/or modify it under the terms of
- * the GNU Affero General Public License as published by the Free Software Foundation,
- * either version 3 of the License, or (at your option) any later version.
- * <p/>
- * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
- * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * See the GNU Affero General Public License for more details.
- * <p/>
- * You should have received a copy of the GNU Affero General Public License along with this program.
- * If not, see <https://www.gnu.org/licenses/>.
+ * Copyright (C) 2023 Regione Emilia-Romagna <p/> This program is free software: you can
+ * redistribute it and/or modify it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the License, or (at your option)
+ * any later version. <p/> This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+ * PARTICULAR PURPOSE. See the GNU Affero General Public License for more details. <p/> You should
+ * have received a copy of the GNU Affero General Public License along with this program. If not,
+ * see <https://www.gnu.org/licenses/>.
  */
 
 /*
  * Copyright 2005-2009 The Apache Software Foundation.
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
  *
  */
 /*
@@ -39,11 +33,7 @@
  */
 package it.eng.crypto.provider.dom;
 
-import javax.xml.crypto.*;
-import javax.xml.crypto.dsig.*;
-import javax.xml.crypto.dsig.spec.HMACParameterSpec;
-import javax.xml.crypto.dsig.spec.SignatureMethodParameterSpec;
-
+import java.io.ByteArrayOutputStream;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.Key;
@@ -53,12 +43,22 @@ import java.security.SignatureException;
 import java.security.spec.AlgorithmParameterSpec;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import javax.crypto.Mac;
 import javax.crypto.SecretKey;
+import javax.xml.crypto.MarshalException;
+import javax.xml.crypto.dsig.SignatureMethod;
+import javax.xml.crypto.dsig.XMLSignContext;
+import javax.xml.crypto.dsig.XMLSignature;
+import javax.xml.crypto.dsig.XMLSignatureException;
+import javax.xml.crypto.dsig.XMLValidateContext;
+import javax.xml.crypto.dsig.spec.HMACParameterSpec;
+import javax.xml.crypto.dsig.spec.SignatureMethodParameterSpec;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import org.jcp.xml.dsig.internal.MacOutputStream;
+import it.eng.crypto.provider.MyMacOutputStream;
 
 /**
  * DOM-based implementation of HMAC SignatureMethod.
@@ -75,114 +75,127 @@ public abstract class DOMHMACSignatureMethod extends DOMSignatureMethod {
     /**
      * Creates a <code>DOMHMACSignatureMethod</code> with the specified params
      *
-     * @param params
-     *            algorithm-specific parameters (may be <code>null</code>)
+     * @param params algorithm-specific parameters (may be <code>null</code>)
      *
-     * @throws InvalidAlgorithmParameterException
-     *             if params are inappropriate
+     * @throws InvalidAlgorithmParameterException if params are inappropriate
      */
-    DOMHMACSignatureMethod(AlgorithmParameterSpec params) throws InvalidAlgorithmParameterException {
-        super(params);
+    DOMHMACSignatureMethod(AlgorithmParameterSpec params)
+	    throws InvalidAlgorithmParameterException {
+	super(params);
     }
 
     /**
      * Creates a <code>DOMHMACSignatureMethod</code> from an element.
      *
-     * @param smElem
-     *            a SignatureMethod element
+     * @param smElem a SignatureMethod element
      */
     DOMHMACSignatureMethod(Element smElem) throws MarshalException {
-        super(smElem);
+	super(smElem);
     }
 
-    void checkParams(SignatureMethodParameterSpec params) throws InvalidAlgorithmParameterException {
-        if (params != null) {
-            if (!(params instanceof HMACParameterSpec)) {
-                throw new InvalidAlgorithmParameterException("params must be of type HMACParameterSpec");
-            }
-            outputLength = ((HMACParameterSpec) params).getOutputLength();
-            outputLengthSet = true;
-            if (log.isLoggable(Level.FINE)) {
-                log.log(Level.FINE, "Setting outputLength from HMACParameterSpec to: " + outputLength);
-            }
-        }
+    void checkParams(SignatureMethodParameterSpec params)
+	    throws InvalidAlgorithmParameterException {
+	if (params != null) {
+	    if (!(params instanceof HMACParameterSpec)) {
+		throw new InvalidAlgorithmParameterException(
+			"params must be of type HMACParameterSpec");
+	    }
+	    outputLength = ((HMACParameterSpec) params).getOutputLength();
+	    outputLengthSet = true;
+	    if (log.isLoggable(Level.FINE)) {
+		log.log(Level.FINE,
+			"Setting outputLength from HMACParameterSpec to: " + outputLength);
+	    }
+	}
     }
 
     SignatureMethodParameterSpec unmarshalParams(Element paramsElem) throws MarshalException {
-        outputLength = new Integer(paramsElem.getFirstChild().getNodeValue()).intValue();
-        outputLengthSet = true;
-        if (log.isLoggable(Level.FINE)) {
-            log.log(Level.FINE, "unmarshalled outputLength: " + outputLength);
-        }
-        return new HMACParameterSpec(outputLength);
+	outputLength = new Integer(paramsElem.getFirstChild().getNodeValue()).intValue();
+	outputLengthSet = true;
+	if (log.isLoggable(Level.FINE)) {
+	    log.log(Level.FINE, "unmarshalled outputLength: " + outputLength);
+	}
+	return new HMACParameterSpec(outputLength);
     }
 
     void marshalParams(Element parent, String prefix) throws MarshalException {
 
-        Document ownerDoc = DOMUtils.getOwnerDocument(parent);
-        Element hmacElem = DOMUtils.createElement(ownerDoc, "HMACOutputLength", XMLSignature.XMLNS, prefix);
-        hmacElem.appendChild(ownerDoc.createTextNode(String.valueOf(outputLength)));
+	Document ownerDoc = DOMUtils.getOwnerDocument(parent);
+	Element hmacElem = DOMUtils.createElement(ownerDoc, "HMACOutputLength", XMLSignature.XMLNS,
+		prefix);
+	hmacElem.appendChild(ownerDoc.createTextNode(String.valueOf(outputLength)));
 
-        parent.appendChild(hmacElem);
+	parent.appendChild(hmacElem);
     }
 
     boolean verify(Key key, DOMSignedInfo si, byte[] sig, XMLValidateContext context)
-            throws InvalidKeyException, SignatureException, XMLSignatureException {
-        if (key == null || si == null || sig == null) {
-            throw new NullPointerException();
-        }
-        if (!(key instanceof SecretKey)) {
-            throw new InvalidKeyException("key must be SecretKey");
-        }
-        if (hmac == null) {
-            try {
-                hmac = Mac.getInstance(getSignatureAlgorithm());
-            } catch (NoSuchAlgorithmException nsae) {
-                throw new XMLSignatureException(nsae);
-            }
-        }
-        if (outputLengthSet && outputLength < getDigestLength()) {
-            throw new XMLSignatureException("HMACOutputLength must not be less than " + getDigestLength());
-        }
-        hmac.init((SecretKey) key);
-        si.canonicalize(context, new MacOutputStream(hmac));
-        byte[] result = hmac.doFinal();
+	    throws InvalidKeyException, SignatureException, XMLSignatureException {
+	if (key == null || si == null || sig == null) {
+	    throw new NullPointerException();
+	}
+	if (!(key instanceof SecretKey)) {
+	    throw new InvalidKeyException("key must be SecretKey");
+	}
+	if (hmac == null) {
+	    try {
+		hmac = Mac.getInstance(getSignatureAlgorithm());
+	    } catch (NoSuchAlgorithmException nsae) {
+		throw new XMLSignatureException(nsae);
+	    }
+	}
+	if (outputLengthSet && outputLength < getDigestLength()) {
+	    throw new XMLSignatureException(
+		    "HMACOutputLength must not be less than " + getDigestLength());
+	}
+	hmac.init((SecretKey) key);
 
-        return MessageDigest.isEqual(sig, result);
+	ByteArrayOutputStream bos = new ByteArrayOutputStream();
+	si.canonicalize(context, bos);
+	hmac.update(bos.toByteArray());
+
+	byte[] result = hmac.doFinal();
+
+	return MessageDigest.isEqual(sig, result);
     }
 
-    byte[] sign(Key key, DOMSignedInfo si, XMLSignContext context) throws InvalidKeyException, XMLSignatureException {
-        if (key == null || si == null) {
-            throw new NullPointerException();
-        }
-        if (!(key instanceof SecretKey)) {
-            throw new InvalidKeyException("key must be SecretKey");
-        }
-        if (hmac == null) {
-            try {
-                hmac = Mac.getInstance(getSignatureAlgorithm());
-            } catch (NoSuchAlgorithmException nsae) {
-                throw new XMLSignatureException(nsae);
-            }
-        }
-        if (outputLengthSet && outputLength < getDigestLength()) {
-            throw new XMLSignatureException("HMACOutputLength must not be less than " + getDigestLength());
-        }
-        hmac.init((SecretKey) key);
-        si.canonicalize(context, new MacOutputStream(hmac));
-        return hmac.doFinal();
+    byte[] sign(Key key, DOMSignedInfo si, XMLSignContext context)
+	    throws InvalidKeyException, XMLSignatureException {
+	if (key == null || si == null) {
+	    throw new NullPointerException();
+	}
+	if (!(key instanceof SecretKey)) {
+	    throw new InvalidKeyException("key must be SecretKey");
+	}
+	if (hmac == null) {
+	    try {
+		hmac = Mac.getInstance(getSignatureAlgorithm());
+	    } catch (NoSuchAlgorithmException nsae) {
+		throw new XMLSignatureException(nsae);
+	    }
+	}
+	if (outputLengthSet && outputLength < getDigestLength()) {
+	    throw new XMLSignatureException(
+		    "HMACOutputLength must not be less than " + getDigestLength());
+	}
+	hmac.init((SecretKey) key);
+
+	ByteArrayOutputStream bos = new ByteArrayOutputStream();
+	si.canonicalize(context, bos);
+	hmac.update(bos.toByteArray());
+
+	return hmac.doFinal();
     }
 
     boolean paramsEqual(AlgorithmParameterSpec spec) {
-        if (getParameterSpec() == spec) {
-            return true;
-        }
-        if (!(spec instanceof HMACParameterSpec)) {
-            return false;
-        }
-        HMACParameterSpec ospec = (HMACParameterSpec) spec;
+	if (getParameterSpec() == spec) {
+	    return true;
+	}
+	if (!(spec instanceof HMACParameterSpec)) {
+	    return false;
+	}
+	HMACParameterSpec ospec = (HMACParameterSpec) spec;
 
-        return (outputLength == ospec.getOutputLength());
+	return (outputLength == ospec.getOutputLength());
     }
 
     /**
@@ -191,90 +204,90 @@ public abstract class DOMHMACSignatureMethod extends DOMSignatureMethod {
     abstract int getDigestLength();
 
     static final class SHA1 extends DOMHMACSignatureMethod {
-        SHA1(AlgorithmParameterSpec params) throws InvalidAlgorithmParameterException {
-            super(params);
-        }
+	SHA1(AlgorithmParameterSpec params) throws InvalidAlgorithmParameterException {
+	    super(params);
+	}
 
-        SHA1(Element dmElem) throws MarshalException {
-            super(dmElem);
-        }
+	SHA1(Element dmElem) throws MarshalException {
+	    super(dmElem);
+	}
 
-        public String getAlgorithm() {
-            return SignatureMethod.HMAC_SHA1;
-        }
+	public String getAlgorithm() {
+	    return SignatureMethod.HMAC_SHA1;
+	}
 
-        String getSignatureAlgorithm() {
-            return "HmacSHA1";
-        }
+	String getSignatureAlgorithm() {
+	    return "HmacSHA1";
+	}
 
-        int getDigestLength() {
-            return 160;
-        }
+	int getDigestLength() {
+	    return 160;
+	}
     }
 
     static final class SHA256 extends DOMHMACSignatureMethod {
-        SHA256(AlgorithmParameterSpec params) throws InvalidAlgorithmParameterException {
-            super(params);
-        }
+	SHA256(AlgorithmParameterSpec params) throws InvalidAlgorithmParameterException {
+	    super(params);
+	}
 
-        SHA256(Element dmElem) throws MarshalException {
-            super(dmElem);
-        }
+	SHA256(Element dmElem) throws MarshalException {
+	    super(dmElem);
+	}
 
-        public String getAlgorithm() {
-            return HMAC_SHA256;
-        }
+	public String getAlgorithm() {
+	    return HMAC_SHA256;
+	}
 
-        String getSignatureAlgorithm() {
-            return "HmacSHA256";
-        }
+	String getSignatureAlgorithm() {
+	    return "HmacSHA256";
+	}
 
-        int getDigestLength() {
-            return 256;
-        }
+	int getDigestLength() {
+	    return 256;
+	}
     }
 
     static final class SHA384 extends DOMHMACSignatureMethod {
-        SHA384(AlgorithmParameterSpec params) throws InvalidAlgorithmParameterException {
-            super(params);
-        }
+	SHA384(AlgorithmParameterSpec params) throws InvalidAlgorithmParameterException {
+	    super(params);
+	}
 
-        SHA384(Element dmElem) throws MarshalException {
-            super(dmElem);
-        }
+	SHA384(Element dmElem) throws MarshalException {
+	    super(dmElem);
+	}
 
-        public String getAlgorithm() {
-            return HMAC_SHA384;
-        }
+	public String getAlgorithm() {
+	    return HMAC_SHA384;
+	}
 
-        String getSignatureAlgorithm() {
-            return "HmacSHA384";
-        }
+	String getSignatureAlgorithm() {
+	    return "HmacSHA384";
+	}
 
-        int getDigestLength() {
-            return 384;
-        }
+	int getDigestLength() {
+	    return 384;
+	}
     }
 
     static final class SHA512 extends DOMHMACSignatureMethod {
-        SHA512(AlgorithmParameterSpec params) throws InvalidAlgorithmParameterException {
-            super(params);
-        }
+	SHA512(AlgorithmParameterSpec params) throws InvalidAlgorithmParameterException {
+	    super(params);
+	}
 
-        SHA512(Element dmElem) throws MarshalException {
-            super(dmElem);
-        }
+	SHA512(Element dmElem) throws MarshalException {
+	    super(dmElem);
+	}
 
-        public String getAlgorithm() {
-            return HMAC_SHA512;
-        }
+	public String getAlgorithm() {
+	    return HMAC_SHA512;
+	}
 
-        String getSignatureAlgorithm() {
-            return "HmacSHA512";
-        }
+	String getSignatureAlgorithm() {
+	    return "HmacSHA512";
+	}
 
-        int getDigestLength() {
-            return 512;
-        }
+	int getDigestLength() {
+	    return 512;
+	}
     }
 }

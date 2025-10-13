@@ -1,34 +1,28 @@
 /*
  * Engineering Ingegneria Informatica S.p.A.
  *
- * Copyright (C) 2023 Regione Emilia-Romagna
- * <p/>
- * This program is free software: you can redistribute it and/or modify it under the terms of
- * the GNU Affero General Public License as published by the Free Software Foundation,
- * either version 3 of the License, or (at your option) any later version.
- * <p/>
- * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
- * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * See the GNU Affero General Public License for more details.
- * <p/>
- * You should have received a copy of the GNU Affero General Public License along with this program.
- * If not, see <https://www.gnu.org/licenses/>.
+ * Copyright (C) 2023 Regione Emilia-Romagna <p/> This program is free software: you can
+ * redistribute it and/or modify it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the License, or (at your option)
+ * any later version. <p/> This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+ * PARTICULAR PURPOSE. See the GNU Affero General Public License for more details. <p/> You should
+ * have received a copy of the GNU Affero General Public License along with this program. If not,
+ * see <https://www.gnu.org/licenses/>.
  */
 
 /*
  * Copyright 2005-2009 The Apache Software Foundation.
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
  *
  */
 /*
@@ -61,89 +55,90 @@ public final class DOMKeyInfoFactory extends KeyInfoFactory {
     }
 
     public KeyInfo newKeyInfo(List content) {
-        return newKeyInfo(content, null);
+	return newKeyInfo(content, null);
     }
 
     public KeyInfo newKeyInfo(List content, String id) {
-        return new DOMKeyInfo(content, id);
+	return new DOMKeyInfo(content, id);
     }
 
     public KeyName newKeyName(String name) {
-        return new DOMKeyName(name);
+	return new DOMKeyName(name);
     }
 
     public KeyValue newKeyValue(PublicKey key) throws KeyException {
-        return new DOMKeyValue(key);
+	return new DOMKeyValue(key);
     }
 
     public PGPData newPGPData(byte[] keyId) {
-        return newPGPData(keyId, null, null);
+	return newPGPData(keyId, null, null);
     }
 
     public PGPData newPGPData(byte[] keyId, byte[] keyPacket, List other) {
-        return new DOMPGPData(keyId, keyPacket, other);
+	return new DOMPGPData(keyId, keyPacket, other);
     }
 
     public PGPData newPGPData(byte[] keyPacket, List other) {
-        return new DOMPGPData(keyPacket, other);
+	return new DOMPGPData(keyPacket, other);
     }
 
     public RetrievalMethod newRetrievalMethod(String uri) {
-        return newRetrievalMethod(uri, null, null);
+	return newRetrievalMethod(uri, null, null);
     }
 
     public RetrievalMethod newRetrievalMethod(String uri, String type, List transforms) {
-        if (uri == null) {
-            throw new NullPointerException("uri must not be null");
-        }
-        return new DOMRetrievalMethod(uri, type, transforms);
+	if (uri == null) {
+	    throw new NullPointerException("uri must not be null");
+	}
+	return new DOMRetrievalMethod(uri, type, transforms);
     }
 
     public X509Data newX509Data(List content) {
-        return new DOMX509Data(content);
+	return new DOMX509Data(content);
     }
 
     public X509IssuerSerial newX509IssuerSerial(String issuerName, BigInteger serialNumber) {
-        return new DOMX509IssuerSerial(issuerName, serialNumber);
+	return new DOMX509IssuerSerial(issuerName, serialNumber);
     }
 
     public boolean isFeatureSupported(String feature) {
-        if (feature == null) {
-            throw new NullPointerException();
-        } else {
-            return false;
-        }
+	if (feature == null) {
+	    throw new NullPointerException();
+	} else {
+	    return false;
+	}
     }
 
     public URIDereferencer getURIDereferencer() {
-        return DOMURIDereferencer.INSTANCE;
+	return DOMURIDereferencer.INSTANCE;
     }
 
     public KeyInfo unmarshalKeyInfo(XMLStructure xmlStructure) throws MarshalException {
-        if (xmlStructure == null) {
-            throw new NullPointerException("xmlStructure cannot be null");
-        }
-        Node node = ((javax.xml.crypto.dom.DOMStructure) xmlStructure).getNode();
-        node.normalize();
+	if (xmlStructure == null) {
+	    throw new NullPointerException("xmlStructure cannot be null");
+	}
+	Node node = ((javax.xml.crypto.dom.DOMStructure) xmlStructure).getNode();
+	node.normalize();
 
-        Element element = null;
-        if (node.getNodeType() == Node.DOCUMENT_NODE) {
-            element = ((Document) node).getDocumentElement();
-        } else if (node.getNodeType() == Node.ELEMENT_NODE) {
-            element = (Element) node;
-        } else {
-            throw new MarshalException("xmlStructure does not contain a proper Node");
-        }
+	Element element = null;
+	if (node.getNodeType() == Node.DOCUMENT_NODE) {
+	    element = ((Document) node).getDocumentElement();
+	} else if (node.getNodeType() == Node.ELEMENT_NODE) {
+	    element = (Element) node;
+	} else {
+	    throw new MarshalException("xmlStructure does not contain a proper Node");
+	}
 
-        // check tag
-        String tag = element.getLocalName();
-        if (tag == null) {
-            throw new MarshalException("Document implementation must " + "support DOM Level 2 and be namespace aware");
-        }
-        if (tag.equals("KeyInfo")) {
-            return new DOMKeyInfo(element, null, getProvider());
-        } else {
-            throw new MarshalException("invalid KeyInfo tag: " + tag);
-        }
+	// check tag
+	String tag = element.getLocalName();
+	if (tag == null) {
+	    throw new MarshalException(
+		    "Document implementation must " + "support DOM Level 2 and be namespace aware");
+	}
+	if (tag.equals("KeyInfo")) {
+	    return new DOMKeyInfo(element, null, getProvider());
+	} else {
+	    throw new MarshalException("invalid KeyInfo tag: " + tag);
+	}
     }
 }

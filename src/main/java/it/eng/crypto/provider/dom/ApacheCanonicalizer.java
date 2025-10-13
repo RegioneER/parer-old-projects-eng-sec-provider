@@ -1,47 +1,57 @@
 /*
  * Engineering Ingegneria Informatica S.p.A.
  *
- * Copyright (C) 2023 Regione Emilia-Romagna
- * <p/>
- * This program is free software: you can redistribute it and/or modify it under the terms of
- * the GNU Affero General Public License as published by the Free Software Foundation,
- * either version 3 of the License, or (at your option) any later version.
- * <p/>
- * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
- * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * See the GNU Affero General Public License for more details.
- * <p/>
- * You should have received a copy of the GNU Affero General Public License along with this program.
- * If not, see <https://www.gnu.org/licenses/>.
+ * Copyright (C) 2023 Regione Emilia-Romagna <p/> This program is free software: you can
+ * redistribute it and/or modify it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the License, or (at your option)
+ * any later version. <p/> This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+ * PARTICULAR PURPOSE. See the GNU Affero General Public License for more details. <p/> You should
+ * have received a copy of the GNU Affero General Public License along with this program. If not,
+ * see <https://www.gnu.org/licenses/>.
  */
 
 package it.eng.crypto.provider.dom;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
-import java.security.spec.AlgorithmParameterSpec;
 import java.security.InvalidAlgorithmParameterException;
+import java.security.spec.AlgorithmParameterSpec;
 import java.util.Set;
-import java.util.logging.Logger;
 import java.util.logging.Level;
-import javax.xml.crypto.*;
+import java.util.logging.Logger;
+
+import javax.xml.crypto.Data;
+import javax.xml.crypto.MarshalException;
+import javax.xml.crypto.NodeSetData;
+import javax.xml.crypto.OctetStreamData;
+import javax.xml.crypto.XMLCryptoContext;
+import javax.xml.crypto.XMLStructure;
 import javax.xml.crypto.dom.DOMCryptoContext;
 import javax.xml.crypto.dsig.TransformException;
 import javax.xml.crypto.dsig.TransformService;
 import javax.xml.crypto.dsig.spec.C14NMethodParameterSpec;
 
+import org.apache.xml.security.c14n.CanonicalizationException;
 import org.apache.xml.security.c14n.Canonicalizer;
 import org.apache.xml.security.c14n.InvalidCanonicalizerException;
+import org.apache.xml.security.parser.XMLParserException;
 import org.apache.xml.security.signature.XMLSignatureInput;
+import org.apache.xml.security.signature.XMLSignatureNodeInput;
+import org.apache.xml.security.signature.XMLSignatureNodeSetInput;
+import org.apache.xml.security.signature.XMLSignatureStreamInput;
 import org.apache.xml.security.transforms.Transform;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 
 public abstract class ApacheCanonicalizer extends TransformService {
 
     static {
-        org.apache.xml.security.Init.init();
+	org.apache.xml.security.Init.init();
     }
 
     private static Logger log = Logger.getLogger("org.jcp.xml.dsig.internal.dom");
@@ -53,172 +63,211 @@ public abstract class ApacheCanonicalizer extends TransformService {
     protected Element transformElem;
 
     public final AlgorithmParameterSpec getParameterSpec() {
-        return params;
+	return params;
     }
 
-    public void init(XMLStructure parent, XMLCryptoContext context) throws InvalidAlgorithmParameterException {
-        if (context != null && !(context instanceof DOMCryptoContext)) {
-            throw new ClassCastException("context must be of type DOMCryptoContext");
-        }
-        transformElem = (Element) ((javax.xml.crypto.dom.DOMStructure) parent).getNode();
-        ownerDoc = DOMUtils.getOwnerDocument(transformElem);
+    public void init(XMLStructure parent, XMLCryptoContext context)
+	    throws InvalidAlgorithmParameterException {
+	if (context != null && !(context instanceof DOMCryptoContext)) {
+	    throw new ClassCastException("context must be of type DOMCryptoContext");
+	}
+	transformElem = (Element) ((javax.xml.crypto.dom.DOMStructure) parent).getNode();
+	ownerDoc = DOMUtils.getOwnerDocument(transformElem);
     }
 
-    public void marshalParams(XMLStructure parent, XMLCryptoContext context) throws MarshalException {
-        if (context != null && !(context instanceof DOMCryptoContext)) {
-            throw new ClassCastException("context must be of type DOMCryptoContext");
-        }
-        transformElem = (Element) ((javax.xml.crypto.dom.DOMStructure) parent).getNode();
-        ownerDoc = DOMUtils.getOwnerDocument(transformElem);
+    public void marshalParams(XMLStructure parent, XMLCryptoContext context)
+	    throws MarshalException {
+	if (context != null && !(context instanceof DOMCryptoContext)) {
+	    throw new ClassCastException("context must be of type DOMCryptoContext");
+	}
+	transformElem = (Element) ((javax.xml.crypto.dom.DOMStructure) parent).getNode();
+	ownerDoc = DOMUtils.getOwnerDocument(transformElem);
     }
 
     public Data canonicalize(Data data, XMLCryptoContext xc) throws TransformException {
-        return canonicalize(data, xc, null);
+	return canonicalize(data, xc, null);
     }
 
-    public Data canonicalize(Data data, XMLCryptoContext xc, OutputStream os) throws TransformException {
+    @SuppressWarnings("rawtypes")
+    public Data canonicalize(Data data, XMLCryptoContext xc, OutputStream os)
+	    throws TransformException {
 
-        if (apacheCanonicalizer == null) {
-            try {
-                apacheCanonicalizer = Canonicalizer.getInstance(getAlgorithm());
-                if (log.isLoggable(Level.FINE)) {
-                    log.log(Level.FINE, "Created canonicalizer for algorithm: " + getAlgorithm());
-                }
-            } catch (InvalidCanonicalizerException ice) {
-                throw new TransformException(
-                        "Couldn't find Canonicalizer for: " + getAlgorithm() + ": " + ice.getMessage(), ice);
-            }
-        }
+	if (apacheCanonicalizer == null) {
+	    try {
+		apacheCanonicalizer = Canonicalizer.getInstance(getAlgorithm());
+		if (log.isLoggable(Level.FINE)) {
+		    log.log(Level.FINE, "Created canonicalizer for algorithm: " + getAlgorithm());
+		}
+	    } catch (InvalidCanonicalizerException ice) {
+		throw new TransformException("Couldn't find Canonicalizer for: " + getAlgorithm()
+			+ ": " + ice.getMessage(), ice);
+	    }
+	}
 
-        if (os != null) {
-            apacheCanonicalizer.setWriter(os);
-        } else {
-            apacheCanonicalizer.setWriter(new ByteArrayOutputStream());
-        }
+	try {
+	    Set nodeSet = null;
+	    if (data instanceof ApacheData) {
+		XMLSignatureInput in = ((ApacheData) data).getXMLSignatureInput();
+		if (in.isElement()) {
+		    return new OctetStreamData(
+			    new ByteArrayInputStream(canonicalizeSubtree(in.getSubNode(), os)));
+		} else if (in.isNodeSet()) {
+		    nodeSet = in.getNodeSet();
+		} else {
+		    return new OctetStreamData(
+			    new ByteArrayInputStream(canonicalize(in.getUnprocessedInput(), os)));
+		}
+	    } else if (data instanceof DOMSubTreeData) {
+		DOMSubTreeData subTree = (DOMSubTreeData) data;
+		return new OctetStreamData(
+			new ByteArrayInputStream(canonicalizeSubtree(subTree.getRoot(), os)));
+	    } else if (data instanceof NodeSetData) {
+		NodeSetData nsd = (NodeSetData) data;
+		// convert Iterator to Set
+		nodeSet = Utils.toNodeSet(nsd.iterator());
+		if (log.isLoggable(Level.FINE)) {
+		    log.log(Level.FINE, "Canonicalizing " + nodeSet.size() + " nodes");
+		}
+	    } else {
+		return new OctetStreamData(new ByteArrayInputStream(
+			canonicalize(((OctetStreamData) data).getOctetStream(), os)));
+	    }
 
-        try {
-            Set nodeSet = null;
-            if (data instanceof ApacheData) {
-                XMLSignatureInput in = ((ApacheData) data).getXMLSignatureInput();
-                if (in.isElement()) {
-                    if (inclusiveNamespaces != null) {
-                        return new OctetStreamData(new ByteArrayInputStream(
-                                apacheCanonicalizer.canonicalizeSubtree(in.getSubNode(), inclusiveNamespaces)));
-                    } else {
-                        return new OctetStreamData(
-                                new ByteArrayInputStream(apacheCanonicalizer.canonicalizeSubtree(in.getSubNode())));
-                    }
-                } else if (in.isNodeSet()) {
-                    nodeSet = in.getNodeSet();
-                } else {
-                    return new OctetStreamData(new ByteArrayInputStream(
-                            apacheCanonicalizer.canonicalize(Utils.readBytesFromStream(in.getOctetStream()))));
-                }
-            } else if (data instanceof DOMSubTreeData) {
-                DOMSubTreeData subTree = (DOMSubTreeData) data;
-                if (inclusiveNamespaces != null) {
-                    return new OctetStreamData(new ByteArrayInputStream(
-                            apacheCanonicalizer.canonicalizeSubtree(subTree.getRoot(), inclusiveNamespaces)));
-                } else {
-                    return new OctetStreamData(
-                            new ByteArrayInputStream(apacheCanonicalizer.canonicalizeSubtree(subTree.getRoot())));
-                }
-            } else if (data instanceof NodeSetData) {
-                NodeSetData nsd = (NodeSetData) data;
-                // convert Iterator to Set
-                nodeSet = Utils.toNodeSet(nsd.iterator());
-                if (log.isLoggable(Level.FINE)) {
-                    log.log(Level.FINE, "Canonicalizing " + nodeSet.size() + " nodes");
-                }
-            } else {
-                return new OctetStreamData(new ByteArrayInputStream(apacheCanonicalizer
-                        .canonicalize(Utils.readBytesFromStream(((OctetStreamData) data).getOctetStream()))));
-            }
-            if (inclusiveNamespaces != null) {
-                return new OctetStreamData(new ByteArrayInputStream(
-                        apacheCanonicalizer.canonicalizeXPathNodeSet(nodeSet, inclusiveNamespaces)));
-            } else {
-                return new OctetStreamData(
-                        new ByteArrayInputStream(apacheCanonicalizer.canonicalizeXPathNodeSet(nodeSet)));
-            }
-        } catch (Exception e) {
-            throw new TransformException(e);
-        }
+	    return new OctetStreamData(
+		    new ByteArrayInputStream(canonicalizeXPathNodeSet(nodeSet, os)));
+	} catch (Exception e) {
+	    throw new TransformException(e);
+	}
     }
 
-    public Data transform(Data data, XMLCryptoContext xc, OutputStream os) throws TransformException {
-        if (data == null) {
-            throw new NullPointerException("data must not be null");
-        }
-        if (os == null) {
-            throw new NullPointerException("output stream must not be null");
-        }
+    @SuppressWarnings({
+	    "rawtypes", "unchecked" })
+    private byte[] canonicalizeXPathNodeSet(Set nodeSet, OutputStream os)
+	    throws CanonicalizationException {
+	ByteArrayOutputStream baos = null;
+	// canonicalize and write result on OutputStream
+	if (os != null) {
+	    baos = (ByteArrayOutputStream) os;
+	} else {
+	    baos = new ByteArrayOutputStream();
+	}
 
-        if (ownerDoc == null) {
-            throw new TransformException("transform must be marshalled");
-        }
+	if (inclusiveNamespaces != null) {
+	    apacheCanonicalizer.canonicalizeXPathNodeSet(nodeSet, inclusiveNamespaces, baos);
+	} else {
+	    apacheCanonicalizer.canonicalizeXPathNodeSet(nodeSet, baos);
+	}
 
-        if (apacheTransform == null) {
-            try {
-                apacheTransform = Transform.getInstance(ownerDoc, getAlgorithm(), transformElem.getChildNodes());
-                apacheTransform.setElement(transformElem, xc.getBaseURI());
-                if (log.isLoggable(Level.FINE)) {
-                    log.log(Level.FINE, "Created transform for algorithm: " + getAlgorithm());
-                }
-            } catch (Exception ex) {
-                throw new TransformException("Couldn't find Transform for: " + getAlgorithm(), ex);
-            }
-        }
+	return baos.toByteArray();
+    }
 
-        XMLSignatureInput in;
-        if (data instanceof ApacheData) {
-            if (log.isLoggable(Level.FINE)) {
-                log.log(Level.FINE, "ApacheData = true");
-            }
-            in = ((ApacheData) data).getXMLSignatureInput();
-        } else if (data instanceof NodeSetData) {
-            if (log.isLoggable(Level.FINE)) {
-                log.log(Level.FINE, "isNodeSet() = true");
-            }
-            if (data instanceof DOMSubTreeData) {
-                DOMSubTreeData subTree = (DOMSubTreeData) data;
-                in = new XMLSignatureInput(subTree.getRoot());
-                in.setExcludeComments(subTree.excludeComments());
-            } else {
-                Set nodeSet = Utils.toNodeSet(((NodeSetData) data).iterator());
-                in = new XMLSignatureInput(nodeSet);
-            }
-        } else {
-            if (log.isLoggable(Level.FINE)) {
-                log.log(Level.FINE, "isNodeSet() = false");
-            }
-            try {
-                in = new XMLSignatureInput(((OctetStreamData) data).getOctetStream());
-            } catch (Exception ex) {
-                throw new TransformException(ex);
-            }
-        }
+    private byte[] canonicalize(InputStream is, OutputStream os)
+	    throws XMLParserException, IOException, CanonicalizationException {
+	ByteArrayOutputStream baos = null;
+	// canonicalize and write result on OutputStream
+	if (os != null) {
+	    baos = (ByteArrayOutputStream) os;
+	} else {
+	    baos = new ByteArrayOutputStream();
+	}
 
-        try {
-            in = apacheTransform.performTransform(in, os);
-            if (!in.isNodeSet() && !in.isElement()) {
-                return null;
-            }
-            if (in.isOctetStream()) {
-                return new ApacheOctetStreamData(in);
-            } else {
-                return new ApacheNodeSetData(in);
-            }
-        } catch (Exception ex) {
-            throw new TransformException(ex);
-        }
+	apacheCanonicalizer.canonicalize(Utils.readBytesFromStream(is), baos, false);
+	return baos.toByteArray();
+    }
+
+    private byte[] canonicalizeSubtree(Node node, OutputStream os)
+	    throws CanonicalizationException {
+	ByteArrayOutputStream baos = null;
+	// canonicalizeSubtree and write result on OutputStream
+	if (os != null) {
+	    baos = (ByteArrayOutputStream) os;
+	} else {
+	    baos = new ByteArrayOutputStream();
+	}
+
+	if (inclusiveNamespaces != null) {
+	    apacheCanonicalizer.canonicalizeSubtree(node, inclusiveNamespaces, baos);
+	} else {
+	    apacheCanonicalizer.canonicalizeSubtree(node, baos);
+	}
+	return baos.toByteArray();
+    }
+
+    public Data transform(Data data, XMLCryptoContext xc, OutputStream os)
+	    throws TransformException {
+	if (data == null) {
+	    throw new NullPointerException("data must not be null");
+	}
+	if (os == null) {
+	    throw new NullPointerException("output stream must not be null");
+	}
+
+	if (ownerDoc == null) {
+	    throw new TransformException("transform must be marshalled");
+	}
+
+	if (apacheTransform == null) {
+	    try {
+		apacheTransform = new Transform(ownerDoc, getAlgorithm(),
+			transformElem.getChildNodes());
+		apacheTransform.setElement(transformElem, xc.getBaseURI());
+		if (log.isLoggable(Level.FINE)) {
+		    log.log(Level.FINE, "Created transform for algorithm: " + getAlgorithm());
+		}
+	    } catch (Exception ex) {
+		throw new TransformException("Couldn't find Transform for: " + getAlgorithm(), ex);
+	    }
+	}
+
+	XMLSignatureInput in;
+	if (data instanceof ApacheData) {
+	    if (log.isLoggable(Level.FINE)) {
+		log.log(Level.FINE, "ApacheData = true");
+	    }
+	    in = ((ApacheData) data).getXMLSignatureInput();
+	} else if (data instanceof NodeSetData) {
+	    if (log.isLoggable(Level.FINE)) {
+		log.log(Level.FINE, "isNodeSet() = true");
+	    }
+	    if (data instanceof DOMSubTreeData) {
+		DOMSubTreeData subTree = (DOMSubTreeData) data;
+		in = new XMLSignatureNodeInput(subTree.getRoot());
+		in.setExcludeComments(subTree.excludeComments());
+	    } else {
+		Set nodeSet = Utils.toNodeSet(((NodeSetData) data).iterator());
+		in = new XMLSignatureNodeSetInput(nodeSet);
+	    }
+	} else {
+	    if (log.isLoggable(Level.FINE)) {
+		log.log(Level.FINE, "isNodeSet() = false");
+	    }
+	    try {
+		in = new XMLSignatureStreamInput(((OctetStreamData) data).getOctetStream());
+	    } catch (Exception ex) {
+		throw new TransformException(ex);
+	    }
+	}
+
+	try {
+	    in = apacheTransform.performTransform(in, os, false);
+	    if (!in.isNodeSet() && !in.isElement()) {
+		return null;
+	    }
+	    if (in.hasUnprocessedInput()) {
+		return new ApacheOctetStreamData(in);
+	    } else {
+		return new ApacheNodeSetData(in);
+	    }
+	} catch (Exception ex) {
+	    throw new TransformException(ex);
+	}
     }
 
     public final boolean isFeatureSupported(String feature) {
-        if (feature == null) {
-            throw new NullPointerException();
-        } else {
-            return false;
-        }
+	if (feature == null) {
+	    throw new NullPointerException();
+	} else {
+	    return false;
+	}
     }
 }
