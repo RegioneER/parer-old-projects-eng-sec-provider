@@ -1,34 +1,28 @@
 /*
  * Engineering Ingegneria Informatica S.p.A.
  *
- * Copyright (C) 2023 Regione Emilia-Romagna
- * <p/>
- * This program is free software: you can redistribute it and/or modify it under the terms of
- * the GNU Affero General Public License as published by the Free Software Foundation,
- * either version 3 of the License, or (at your option) any later version.
- * <p/>
- * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
- * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * See the GNU Affero General Public License for more details.
- * <p/>
- * You should have received a copy of the GNU Affero General Public License along with this program.
- * If not, see <https://www.gnu.org/licenses/>.
+ * Copyright (C) 2023 Regione Emilia-Romagna <p/> This program is free software: you can
+ * redistribute it and/or modify it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the License, or (at your option)
+ * any later version. <p/> This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+ * PARTICULAR PURPOSE. See the GNU Affero General Public License for more details. <p/> You should
+ * have received a copy of the GNU Affero General Public License along with this program. If not,
+ * see <https://www.gnu.org/licenses/>.
  */
 
 /*
  * Copyright 2005-2009 The Apache Software Foundation.
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
  *
  */
 /*
@@ -68,7 +62,8 @@ import org.w3c.dom.Node;
  * @author Sean Mullan
  * @author Joyce Leung
  */
-public final class DOMRetrievalMethod extends DOMStructure implements RetrievalMethod, DOMURIReference {
+public final class DOMRetrievalMethod extends DOMStructure
+	implements RetrievalMethod, DOMURIReference {
 
     private final List transforms;
     private String uri;
@@ -76,185 +71,187 @@ public final class DOMRetrievalMethod extends DOMStructure implements RetrievalM
     private Attr here;
 
     /**
-     * Creates a <code>DOMRetrievalMethod</code> containing the specified URIReference and List of Transforms.
+     * Creates a <code>DOMRetrievalMethod</code> containing the specified URIReference and List of
+     * Transforms.
      *
-     * @param uri
-     *            the URI
-     * @param type
-     *            the type
-     * @param transforms
-     *            a list of {@link Transform}s. The list is defensively copied to prevent subsequent modification. May
-     *            be <code>null</code> or empty.
+     * @param uri        the URI
+     * @param type       the type
+     * @param transforms a list of {@link Transform}s. The list is defensively copied to prevent
+     *                   subsequent modification. May be <code>null</code> or empty.
      *
-     * @throws IllegalArgumentException
-     *             if the format of <code>uri</code> is invalid, as specified by Reference's URI attribute in the W3C
-     *             specification for XML-Signature Syntax and Processing
-     * @throws NullPointerException
-     *             if <code>uriReference</code> is <code>null</code>
-     * @throws ClassCastException
-     *             if <code>transforms</code> contains any entries that are not of type {@link Transform}
+     * @throws IllegalArgumentException if the format of <code>uri</code> is invalid, as specified
+     *                                  by Reference's URI attribute in the W3C specification for
+     *                                  XML-Signature Syntax and Processing
+     * @throws NullPointerException     if <code>uriReference</code> is <code>null</code>
+     * @throws ClassCastException       if <code>transforms</code> contains any entries that are not
+     *                                  of type {@link Transform}
      */
     public DOMRetrievalMethod(String uri, String type, List transforms) {
-        if (uri == null) {
-            throw new NullPointerException("uri cannot be null");
-        }
-        if (transforms == null || transforms.isEmpty()) {
-            this.transforms = Collections.EMPTY_LIST;
-        } else {
-            List transformsCopy = new ArrayList(transforms);
-            for (int i = 0, size = transformsCopy.size(); i < size; i++) {
-                if (!(transformsCopy.get(i) instanceof Transform)) {
-                    throw new ClassCastException("transforms[" + i + "] is not a valid type");
-                }
-            }
-            this.transforms = Collections.unmodifiableList(transformsCopy);
-        }
-        this.uri = uri;
-        if ((uri != null) && (!uri.equals(""))) {
-            try {
-                new URI(uri);
-            } catch (URISyntaxException e) {
-                throw new IllegalArgumentException(e.getMessage());
-            }
-        }
+	if (uri == null) {
+	    throw new NullPointerException("uri cannot be null");
+	}
+	if (transforms == null || transforms.isEmpty()) {
+	    this.transforms = Collections.EMPTY_LIST;
+	} else {
+	    List transformsCopy = new ArrayList(transforms);
+	    for (int i = 0, size = transformsCopy.size(); i < size; i++) {
+		if (!(transformsCopy.get(i) instanceof Transform)) {
+		    throw new ClassCastException("transforms[" + i + "] is not a valid type");
+		}
+	    }
+	    this.transforms = Collections.unmodifiableList(transformsCopy);
+	}
+	this.uri = uri;
+	if ((uri != null) && (!uri.equals(""))) {
+	    try {
+		new URI(uri);
+	    } catch (URISyntaxException e) {
+		throw new IllegalArgumentException(e.getMessage());
+	    }
+	}
 
-        this.type = type;
+	this.type = type;
     }
 
     /**
      * Creates a <code>DOMRetrievalMethod</code> from an element.
      *
-     * @param rmElem
-     *            a RetrievalMethod element
+     * @param rmElem a RetrievalMethod element
      */
-    public DOMRetrievalMethod(Element rmElem, XMLCryptoContext context, Provider provider) throws MarshalException {
-        // get URI and Type attributes
-        uri = DOMUtils.getAttributeValue(rmElem, "URI");
-        type = DOMUtils.getAttributeValue(rmElem, "Type");
+    public DOMRetrievalMethod(Element rmElem, XMLCryptoContext context, Provider provider)
+	    throws MarshalException {
+	// get URI and Type attributes
+	uri = DOMUtils.getAttributeValue(rmElem, "URI");
+	type = DOMUtils.getAttributeValue(rmElem, "Type");
 
-        // get here node
-        here = rmElem.getAttributeNodeNS(null, "URI");
+	// get here node
+	here = rmElem.getAttributeNodeNS(null, "URI");
 
-        // get Transforms, if specified
-        List transforms = new ArrayList();
-        Element transformsElem = DOMUtils.getFirstChildElement(rmElem);
-        if (transformsElem != null) {
-            Element transformElem = DOMUtils.getFirstChildElement(transformsElem);
-            while (transformElem != null) {
-                transforms.add(new DOMTransform(transformElem, context, provider));
-                transformElem = DOMUtils.getNextSiblingElement(transformElem);
-            }
-        }
-        if (transforms.isEmpty()) {
-            this.transforms = Collections.EMPTY_LIST;
-        } else {
-            this.transforms = Collections.unmodifiableList(transforms);
-        }
+	// get Transforms, if specified
+	List transforms = new ArrayList();
+	Element transformsElem = DOMUtils.getFirstChildElement(rmElem);
+	if (transformsElem != null) {
+	    Element transformElem = DOMUtils.getFirstChildElement(transformsElem);
+	    while (transformElem != null) {
+		transforms.add(new DOMTransform(transformElem, context, provider));
+		transformElem = DOMUtils.getNextSiblingElement(transformElem);
+	    }
+	}
+	if (transforms.isEmpty()) {
+	    this.transforms = Collections.EMPTY_LIST;
+	} else {
+	    this.transforms = Collections.unmodifiableList(transforms);
+	}
     }
 
     public String getURI() {
-        return uri;
+	return uri;
     }
 
     public String getType() {
-        return type;
+	return type;
     }
 
     public List getTransforms() {
-        return transforms;
+	return transforms;
     }
 
-    public void marshal(Node parent, String dsPrefix, DOMCryptoContext context) throws MarshalException {
-        Document ownerDoc = DOMUtils.getOwnerDocument(parent);
+    public void marshal(Node parent, String dsPrefix, DOMCryptoContext context)
+	    throws MarshalException {
+	Document ownerDoc = DOMUtils.getOwnerDocument(parent);
 
-        Element rmElem = DOMUtils.createElement(ownerDoc, "RetrievalMethod", XMLSignature.XMLNS, dsPrefix);
+	Element rmElem = DOMUtils.createElement(ownerDoc, "RetrievalMethod", XMLSignature.XMLNS,
+		dsPrefix);
 
-        // add URI and Type attributes
-        DOMUtils.setAttribute(rmElem, "URI", uri);
-        DOMUtils.setAttribute(rmElem, "Type", type);
+	// add URI and Type attributes
+	DOMUtils.setAttribute(rmElem, "URI", uri);
+	DOMUtils.setAttribute(rmElem, "Type", type);
 
-        // add Transforms elements
-        if (!transforms.isEmpty()) {
-            Element transformsElem = DOMUtils.createElement(ownerDoc, "Transforms", XMLSignature.XMLNS, dsPrefix);
-            rmElem.appendChild(transformsElem);
-            for (int i = 0, size = transforms.size(); i < size; i++) {
-                ((DOMTransform) transforms.get(i)).marshal(transformsElem, dsPrefix, context);
-            }
-        }
+	// add Transforms elements
+	if (!transforms.isEmpty()) {
+	    Element transformsElem = DOMUtils.createElement(ownerDoc, "Transforms",
+		    XMLSignature.XMLNS, dsPrefix);
+	    rmElem.appendChild(transformsElem);
+	    for (int i = 0, size = transforms.size(); i < size; i++) {
+		((DOMTransform) transforms.get(i)).marshal(transformsElem, dsPrefix, context);
+	    }
+	}
 
-        parent.appendChild(rmElem);
+	parent.appendChild(rmElem);
 
-        // save here node
-        here = rmElem.getAttributeNodeNS(null, "URI");
+	// save here node
+	here = rmElem.getAttributeNodeNS(null, "URI");
     }
 
     public Node getHere() {
-        return here;
+	return here;
     }
 
     public Data dereference(XMLCryptoContext context) throws URIReferenceException {
 
-        if (context == null) {
-            throw new NullPointerException("context cannot be null");
-        }
+	if (context == null) {
+	    throw new NullPointerException("context cannot be null");
+	}
 
-        /*
-         * If URIDereferencer is specified in context; use it, otherwise use built-in.
-         */
-        URIDereferencer deref = context.getURIDereferencer();
-        if (deref == null) {
-            deref = DOMURIDereferencer.INSTANCE;
-        }
+	/*
+	 * If URIDereferencer is specified in context; use it, otherwise use built-in.
+	 */
+	URIDereferencer deref = context.getURIDereferencer();
+	if (deref == null) {
+	    deref = DOMURIDereferencer.INSTANCE;
+	}
 
-        Data data = deref.dereference(this, context);
+	Data data = deref.dereference(this, context);
 
-        // pass dereferenced data through Transforms
-        try {
-            for (int i = 0, size = transforms.size(); i < size; i++) {
-                Transform transform = (Transform) transforms.get(i);
-                data = ((DOMTransform) transform).transform(data, context);
-            }
-        } catch (Exception e) {
-            throw new URIReferenceException(e);
-        }
-        return data;
+	// pass dereferenced data through Transforms
+	try {
+	    for (int i = 0, size = transforms.size(); i < size; i++) {
+		Transform transform = (Transform) transforms.get(i);
+		data = ((DOMTransform) transform).transform(data, context);
+	    }
+	} catch (Exception e) {
+	    throw new URIReferenceException(e);
+	}
+	return data;
     }
 
-    public XMLStructure dereferenceAsXMLStructure(XMLCryptoContext context) throws URIReferenceException {
+    public XMLStructure dereferenceAsXMLStructure(XMLCryptoContext context)
+	    throws URIReferenceException {
 
-        try {
-            ApacheData data = (ApacheData) dereference(context);
-            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-            dbf.setNamespaceAware(true);
-            DocumentBuilder db = dbf.newDocumentBuilder();
-            Document doc = db.parse(new ByteArrayInputStream(data.getXMLSignatureInput().getBytes()));
-            Element kiElem = doc.getDocumentElement();
-            if (kiElem.getLocalName().equals("X509Data")) {
-                return new DOMX509Data(kiElem);
-            } else {
-                return null; // unsupported
-            }
-        } catch (Exception e) {
-            throw new URIReferenceException(e);
-        }
+	try {
+	    ApacheData data = (ApacheData) dereference(context);
+	    DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+	    dbf.setNamespaceAware(true);
+	    DocumentBuilder db = dbf.newDocumentBuilder();
+	    Document doc = db
+		    .parse(new ByteArrayInputStream(data.getXMLSignatureInput().getBytes()));
+	    Element kiElem = doc.getDocumentElement();
+	    if (kiElem.getLocalName().equals("X509Data")) {
+		return new DOMX509Data(kiElem);
+	    } else {
+		return null; // unsupported
+	    }
+	} catch (Exception e) {
+	    throw new URIReferenceException(e);
+	}
     }
 
     public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (!(obj instanceof RetrievalMethod)) {
-            return false;
-        }
-        RetrievalMethod orm = (RetrievalMethod) obj;
+	if (this == obj) {
+	    return true;
+	}
+	if (!(obj instanceof RetrievalMethod)) {
+	    return false;
+	}
+	RetrievalMethod orm = (RetrievalMethod) obj;
 
-        boolean typesEqual = (type == null ? orm.getType() == null : type.equals(orm.getType()));
+	boolean typesEqual = (type == null ? orm.getType() == null : type.equals(orm.getType()));
 
-        return (uri.equals(orm.getURI()) && transforms.equals(orm.getTransforms()) && typesEqual);
+	return (uri.equals(orm.getURI()) && transforms.equals(orm.getTransforms()) && typesEqual);
     }
 
     public int hashCode() {
-        assert false : "hashCode not designed";
-        return 48;
+	assert false : "hashCode not designed";
+	return 48;
     }
 }
