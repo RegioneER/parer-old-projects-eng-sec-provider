@@ -38,46 +38,46 @@ public class MyDOMURIDereferencer implements URIDereferencer {
     static final URIDereferencer INSTANCE = new MyDOMURIDereferencer();
 
     private MyDOMURIDereferencer() {
-	Init.init();
+        Init.init();
     }
 
     public Data dereference(URIReference paramURIReference, XMLCryptoContext paramXMLCryptoContext)
-	    throws URIReferenceException {
-	if (paramURIReference == null)
-	    throw new NullPointerException("uriRef cannot be null");
-	if (paramXMLCryptoContext == null)
-	    throw new NullPointerException("context cannot be null");
-	DOMURIReference localDOMURIReference = (DOMURIReference) paramURIReference;
-	Attr localAttr = (Attr) localDOMURIReference.getHere();
-	String str1 = paramURIReference.getURI();
-	DOMCryptoContext localDOMCryptoContext = (DOMCryptoContext) paramXMLCryptoContext;
-	String str2;
-	Object localObject;
-	if ((str1 != null) && (str1.length() != 0) && (str1.charAt(0) == '#')) {
-	    str2 = str1.substring(1);
-	    if (str2.startsWith("xpointer(id(")) {
-		int i = str2.indexOf('\'');
-		int j = str2.indexOf('\'', i + 1);
-		str2 = str2.substring(i + 1, j);
-	    }
-	    localObject = localDOMCryptoContext.getElementById(str2);
-	    if (localObject instanceof Element) {
-		Element element = (Element) localObject;
-		element.setIdAttribute("Id", true); // Replace "Id" with your actual attribute name
-						    // if different
-	    }
-	}
-	try {
-	    str2 = paramXMLCryptoContext.getBaseURI();
-	    ResourceResolverContext rrcontext = new ResourceResolverContext(localAttr, str2, false);
-	    XMLSignatureInput localXMLSignatureInput = ResourceResolver.resolve(rrcontext);
-	    if (localXMLSignatureInput.hasUnprocessedInput()) {
-		return new ApacheOctetStreamData(localXMLSignatureInput);
-	    }
-	    return new ApacheNodeSetData(localXMLSignatureInput);
-	} catch (Exception localException) {
-	    throw new URIReferenceException(localException);
-	}
+            throws URIReferenceException {
+        if (paramURIReference == null)
+            throw new NullPointerException("uriRef cannot be null");
+        if (paramXMLCryptoContext == null)
+            throw new NullPointerException("context cannot be null");
+        DOMURIReference localDOMURIReference = (DOMURIReference) paramURIReference;
+        Attr localAttr = (Attr) localDOMURIReference.getHere();
+        String str1 = paramURIReference.getURI();
+        DOMCryptoContext localDOMCryptoContext = (DOMCryptoContext) paramXMLCryptoContext;
+        String str2;
+        Object localObject;
+        if ((str1 != null) && (str1.length() != 0) && (str1.charAt(0) == '#')) {
+            str2 = str1.substring(1);
+            if (str2.startsWith("xpointer(id(")) {
+                int i = str2.indexOf('\'');
+                int j = str2.indexOf('\'', i + 1);
+                str2 = str2.substring(i + 1, j);
+            }
+            localObject = localDOMCryptoContext.getElementById(str2);
+            if (localObject instanceof Element) {
+                Element element = (Element) localObject;
+                element.setIdAttribute("Id", true); // Replace "Id" with your actual attribute name
+                // if different
+            }
+        }
+        try {
+            str2 = paramXMLCryptoContext.getBaseURI();
+            ResourceResolverContext rrcontext = new ResourceResolverContext(localAttr, str2, false);
+            XMLSignatureInput localXMLSignatureInput = ResourceResolver.resolve(rrcontext);
+            if (localXMLSignatureInput.hasUnprocessedInput()) {
+                return new ApacheOctetStreamData(localXMLSignatureInput);
+            }
+            return new ApacheNodeSetData(localXMLSignatureInput);
+        } catch (Exception localException) {
+            throw new URIReferenceException(localException);
+        }
     }
 
 }

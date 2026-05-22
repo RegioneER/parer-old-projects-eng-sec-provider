@@ -68,7 +68,7 @@ import org.w3c.dom.Element;
 public abstract class ApacheTransform extends TransformService {
 
     static {
-	org.apache.xml.security.Init.init();
+        org.apache.xml.security.Init.init();
     }
 
     private static Logger log = Logger.getLogger("org.jcp.xml.dsig.internal.dom");
@@ -78,121 +78,121 @@ public abstract class ApacheTransform extends TransformService {
     protected TransformParameterSpec params;
 
     public final AlgorithmParameterSpec getParameterSpec() {
-	return params;
+        return params;
     }
 
     public void init(XMLStructure parent, XMLCryptoContext context)
-	    throws InvalidAlgorithmParameterException {
-	if (context != null && !(context instanceof DOMCryptoContext)) {
-	    throw new ClassCastException("context must be of type DOMCryptoContext");
-	}
-	transformElem = (Element) ((javax.xml.crypto.dom.DOMStructure) parent).getNode();
-	ownerDoc = DOMUtils.getOwnerDocument(transformElem);
+            throws InvalidAlgorithmParameterException {
+        if (context != null && !(context instanceof DOMCryptoContext)) {
+            throw new ClassCastException("context must be of type DOMCryptoContext");
+        }
+        transformElem = (Element) ((javax.xml.crypto.dom.DOMStructure) parent).getNode();
+        ownerDoc = DOMUtils.getOwnerDocument(transformElem);
     }
 
     public void marshalParams(XMLStructure parent, XMLCryptoContext context)
-	    throws MarshalException {
-	if (context != null && !(context instanceof DOMCryptoContext)) {
-	    throw new ClassCastException("context must be of type DOMCryptoContext");
-	}
-	transformElem = (Element) ((javax.xml.crypto.dom.DOMStructure) parent).getNode();
-	ownerDoc = DOMUtils.getOwnerDocument(transformElem);
+            throws MarshalException {
+        if (context != null && !(context instanceof DOMCryptoContext)) {
+            throw new ClassCastException("context must be of type DOMCryptoContext");
+        }
+        transformElem = (Element) ((javax.xml.crypto.dom.DOMStructure) parent).getNode();
+        ownerDoc = DOMUtils.getOwnerDocument(transformElem);
     }
 
     public Data transform(Data data, XMLCryptoContext xc) throws TransformException {
-	if (data == null) {
-	    throw new NullPointerException("data must not be null");
-	}
-	return transformIt(data, xc, (OutputStream) null);
+        if (data == null) {
+            throw new NullPointerException("data must not be null");
+        }
+        return transformIt(data, xc, (OutputStream) null);
     }
 
     public Data transform(Data data, XMLCryptoContext xc, OutputStream os)
-	    throws TransformException {
-	if (data == null) {
-	    throw new NullPointerException("data must not be null");
-	}
-	if (os == null) {
-	    throw new NullPointerException("output stream must not be null");
-	}
-	return transformIt(data, xc, os);
+            throws TransformException {
+        if (data == null) {
+            throw new NullPointerException("data must not be null");
+        }
+        if (os == null) {
+            throw new NullPointerException("output stream must not be null");
+        }
+        return transformIt(data, xc, os);
     }
 
     private Data transformIt(Data data, XMLCryptoContext xc, OutputStream os)
-	    throws TransformException {
+            throws TransformException {
 
-	if (ownerDoc == null) {
-	    throw new TransformException("transform must be marshalled");
-	}
+        if (ownerDoc == null) {
+            throw new TransformException("transform must be marshalled");
+        }
 
-	if (apacheTransform == null) {
-	    try {
-		apacheTransform = new Transform(ownerDoc, getAlgorithm(),
-			transformElem.getChildNodes());
-		apacheTransform.setElement(transformElem, xc.getBaseURI());
-		if (log.isLoggable(Level.FINE)) {
-		    log.log(Level.FINE, "Created transform for algorithm: " + getAlgorithm());
-		}
-	    } catch (Exception ex) {
-		throw new TransformException("Couldn't find Transform for: " + getAlgorithm(), ex);
-	    }
-	}
+        if (apacheTransform == null) {
+            try {
+                apacheTransform = new Transform(ownerDoc, getAlgorithm(),
+                        transformElem.getChildNodes());
+                apacheTransform.setElement(transformElem, xc.getBaseURI());
+                if (log.isLoggable(Level.FINE)) {
+                    log.log(Level.FINE, "Created transform for algorithm: " + getAlgorithm());
+                }
+            } catch (Exception ex) {
+                throw new TransformException("Couldn't find Transform for: " + getAlgorithm(), ex);
+            }
+        }
 
-	XMLSignatureInput in;
-	if (data instanceof ApacheData) {
-	    if (log.isLoggable(Level.FINE)) {
-		log.log(Level.FINE, "ApacheData = true");
-	    }
-	    in = ((ApacheData) data).getXMLSignatureInput();
-	} else if (data instanceof NodeSetData) {
-	    if (log.isLoggable(Level.FINE)) {
-		log.log(Level.FINE, "isNodeSet() = true");
-	    }
-	    if (data instanceof DOMSubTreeData) {
-		if (log.isLoggable(Level.FINE)) {
-		    log.log(Level.FINE, "DOMSubTreeData = true");
-		}
-		DOMSubTreeData subTree = (DOMSubTreeData) data;
-		in = new XMLSignatureNodeInput(subTree.getRoot());
-		in.setExcludeComments(subTree.excludeComments());
-	    } else {
-		Set nodeSet = Utils.toNodeSet(((NodeSetData) data).iterator());
-		in = new XMLSignatureNodeSetInput(nodeSet);
-	    }
-	} else {
-	    if (log.isLoggable(Level.FINE)) {
-		log.log(Level.FINE, "isNodeSet() = false");
-	    }
-	    try {
-		in = new XMLSignatureStreamInput(((OctetStreamData) data).getOctetStream());
-	    } catch (Exception ex) {
-		throw new TransformException(ex);
-	    }
-	}
+        XMLSignatureInput in;
+        if (data instanceof ApacheData) {
+            if (log.isLoggable(Level.FINE)) {
+                log.log(Level.FINE, "ApacheData = true");
+            }
+            in = ((ApacheData) data).getXMLSignatureInput();
+        } else if (data instanceof NodeSetData) {
+            if (log.isLoggable(Level.FINE)) {
+                log.log(Level.FINE, "isNodeSet() = true");
+            }
+            if (data instanceof DOMSubTreeData) {
+                if (log.isLoggable(Level.FINE)) {
+                    log.log(Level.FINE, "DOMSubTreeData = true");
+                }
+                DOMSubTreeData subTree = (DOMSubTreeData) data;
+                in = new XMLSignatureNodeInput(subTree.getRoot());
+                in.setExcludeComments(subTree.excludeComments());
+            } else {
+                Set nodeSet = Utils.toNodeSet(((NodeSetData) data).iterator());
+                in = new XMLSignatureNodeSetInput(nodeSet);
+            }
+        } else {
+            if (log.isLoggable(Level.FINE)) {
+                log.log(Level.FINE, "isNodeSet() = false");
+            }
+            try {
+                in = new XMLSignatureStreamInput(((OctetStreamData) data).getOctetStream());
+            } catch (Exception ex) {
+                throw new TransformException(ex);
+            }
+        }
 
-	try {
-	    if (os != null) {
-		in = apacheTransform.performTransform(in, os, false);
-		if (!in.isNodeSet() && !in.isElement()) {
-		    return null;
-		}
-	    } else {
-		in = apacheTransform.performTransform(in, false);
-	    }
-	    if (in.hasUnprocessedInput()) {
-		return new ApacheOctetStreamData(in);
-	    } else {
-		return new ApacheNodeSetData(in);
-	    }
-	} catch (Exception ex) {
-	    throw new TransformException(ex);
-	}
+        try {
+            if (os != null) {
+                in = apacheTransform.performTransform(in, os, false);
+                if (!in.isNodeSet() && !in.isElement()) {
+                    return null;
+                }
+            } else {
+                in = apacheTransform.performTransform(in, false);
+            }
+            if (in.hasUnprocessedInput()) {
+                return new ApacheOctetStreamData(in);
+            } else {
+                return new ApacheNodeSetData(in);
+            }
+        } catch (Exception ex) {
+            throw new TransformException(ex);
+        }
     }
 
     public final boolean isFeatureSupported(String feature) {
-	if (feature == null) {
-	    throw new NullPointerException();
-	} else {
-	    return false;
-	}
+        if (feature == null) {
+            throw new NullPointerException();
+        } else {
+            return false;
+        }
     }
 }

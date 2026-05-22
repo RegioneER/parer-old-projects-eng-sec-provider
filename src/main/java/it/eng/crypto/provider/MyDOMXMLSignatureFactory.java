@@ -59,214 +59,214 @@ import it.eng.crypto.provider.dom.DOMXMLSignature;
 
 public final class MyDOMXMLSignatureFactory extends XMLSignatureFactory {
     public XMLSignature newXMLSignature(SignedInfo paramSignedInfo, KeyInfo paramKeyInfo) {
-	return new DOMXMLSignature(paramSignedInfo, paramKeyInfo, null, null, null);
+        return new DOMXMLSignature(paramSignedInfo, paramKeyInfo, null, null, null);
     }
 
     public XMLSignature newXMLSignature(SignedInfo paramSignedInfo, KeyInfo paramKeyInfo,
-	    List paramList, String paramString1, String paramString2) {
-	return new DOMXMLSignature(paramSignedInfo, paramKeyInfo, paramList, paramString1,
-		paramString2);
+            List paramList, String paramString1, String paramString2) {
+        return new DOMXMLSignature(paramSignedInfo, paramKeyInfo, paramList, paramString1,
+                paramString2);
     }
 
     public Reference newReference(String paramString, DigestMethod paramDigestMethod) {
-	return newReference(paramString, paramDigestMethod, null, null, null);
+        return newReference(paramString, paramDigestMethod, null, null, null);
     }
 
     public Reference newReference(String paramString1, DigestMethod paramDigestMethod,
-	    List paramList, String paramString2, String paramString3) {
-	return new DOMReference(paramString1, paramString2, paramDigestMethod, paramList,
-		paramString3, getProvider());
+            List paramList, String paramString2, String paramString3) {
+        return new DOMReference(paramString1, paramString2, paramDigestMethod, paramList,
+                paramString3, getProvider());
     }
 
     public Reference newReference(String paramString1, DigestMethod paramDigestMethod,
-	    List paramList1, Data paramData, List paramList2, String paramString2,
-	    String paramString3) {
-	if (paramList1 == null)
-	    throw new NullPointerException("appliedTransforms cannot be null");
-	if (paramList1.isEmpty())
-	    throw new NullPointerException("appliedTransforms cannot be empty");
-	if (paramData == null)
-	    throw new NullPointerException("result cannot be null");
-	return new DOMReference(paramString1, paramString2, paramDigestMethod, paramList1,
-		paramData, paramList2, paramString3, getProvider());
+            List paramList1, Data paramData, List paramList2, String paramString2,
+            String paramString3) {
+        if (paramList1 == null)
+            throw new NullPointerException("appliedTransforms cannot be null");
+        if (paramList1.isEmpty())
+            throw new NullPointerException("appliedTransforms cannot be empty");
+        if (paramData == null)
+            throw new NullPointerException("result cannot be null");
+        return new DOMReference(paramString1, paramString2, paramDigestMethod, paramList1,
+                paramData, paramList2, paramString3, getProvider());
     }
 
     public Reference newReference(String paramString1, DigestMethod paramDigestMethod,
-	    List paramList, String paramString2, String paramString3, byte[] paramArrayOfByte) {
-	if (paramArrayOfByte == null)
-	    throw new NullPointerException("digestValue cannot be null");
-	return new DOMReference(paramString1, paramString2, paramDigestMethod, null, null,
-		paramList, paramString3, paramArrayOfByte, getProvider());
+            List paramList, String paramString2, String paramString3, byte[] paramArrayOfByte) {
+        if (paramArrayOfByte == null)
+            throw new NullPointerException("digestValue cannot be null");
+        return new DOMReference(paramString1, paramString2, paramDigestMethod, null, null,
+                paramList, paramString3, paramArrayOfByte, getProvider());
     }
 
     public SignedInfo newSignedInfo(CanonicalizationMethod paramCanonicalizationMethod,
-	    SignatureMethod paramSignatureMethod, List paramList) {
-	return newSignedInfo(paramCanonicalizationMethod, paramSignatureMethod, paramList, null);
+            SignatureMethod paramSignatureMethod, List paramList) {
+        return newSignedInfo(paramCanonicalizationMethod, paramSignatureMethod, paramList, null);
     }
 
     public SignedInfo newSignedInfo(CanonicalizationMethod paramCanonicalizationMethod,
-	    SignatureMethod paramSignatureMethod, List paramList, String paramString) {
-	return new DOMSignedInfo(paramCanonicalizationMethod, paramSignatureMethod, paramList,
-		paramString);
+            SignatureMethod paramSignatureMethod, List paramList, String paramString) {
+        return new DOMSignedInfo(paramCanonicalizationMethod, paramSignatureMethod, paramList,
+                paramString);
     }
 
     public XMLObject newXMLObject(List paramList, String paramString1, String paramString2,
-	    String paramString3) {
-	return new DOMXMLObject(paramList, paramString1, paramString2, paramString3);
+            String paramString3) {
+        return new DOMXMLObject(paramList, paramString1, paramString2, paramString3);
     }
 
     public Manifest newManifest(List paramList) {
-	return newManifest(paramList, null);
+        return newManifest(paramList, null);
     }
 
     public Manifest newManifest(List paramList, String paramString) {
-	return new DOMManifest(paramList, paramString);
+        return new DOMManifest(paramList, paramString);
     }
 
     public SignatureProperties newSignatureProperties(List paramList, String paramString) {
-	return new DOMSignatureProperties(paramList, paramString);
+        return new DOMSignatureProperties(paramList, paramString);
     }
 
     public SignatureProperty newSignatureProperty(List paramList, String paramString1,
-	    String paramString2) {
-	return new DOMSignatureProperty(paramList, paramString1, paramString2);
+            String paramString2) {
+        return new DOMSignatureProperty(paramList, paramString1, paramString2);
     }
 
     public XMLSignature unmarshalXMLSignature(XMLValidateContext paramXMLValidateContext)
-	    throws MarshalException {
-	if (paramXMLValidateContext == null)
-	    throw new NullPointerException("context cannot be null");
-	return unmarshal(((DOMValidateContext) paramXMLValidateContext).getNode(),
-		paramXMLValidateContext);
+            throws MarshalException {
+        if (paramXMLValidateContext == null)
+            throw new NullPointerException("context cannot be null");
+        return unmarshal(((DOMValidateContext) paramXMLValidateContext).getNode(),
+                paramXMLValidateContext);
     }
 
     public XMLSignature unmarshalXMLSignature(XMLStructure paramXMLStructure)
-	    throws MarshalException {
-	if (paramXMLStructure == null)
-	    throw new NullPointerException("xmlStructure cannot be null");
-	return unmarshal(((DOMStructure) paramXMLStructure).getNode(), null);
+            throws MarshalException {
+        if (paramXMLStructure == null)
+            throw new NullPointerException("xmlStructure cannot be null");
+        return unmarshal(((DOMStructure) paramXMLStructure).getNode(), null);
     }
 
     private XMLSignature unmarshal(Node paramNode, XMLValidateContext paramXMLValidateContext)
-	    throws MarshalException {
-	paramNode.normalize();
-	Element localElement = null;
-	if (paramNode.getNodeType() == 9)
-	    localElement = ((Document) paramNode).getDocumentElement();
-	else if (paramNode.getNodeType() == 1)
-	    localElement = (Element) paramNode;
-	else
-	    throw new MarshalException("Signature element is not a proper Node");
-	String str = localElement.getLocalName();
-	if (str == null)
-	    throw new MarshalException(
-		    "Document implementation must support DOM Level 2 and be namespace aware");
-	if (str.equals("Signature"))
-	    return new it.eng.crypto.provider.dom.DOMXMLSignature(localElement,
-		    paramXMLValidateContext, getProvider());
-	throw new MarshalException("invalid Signature tag: " + str);
+            throws MarshalException {
+        paramNode.normalize();
+        Element localElement = null;
+        if (paramNode.getNodeType() == 9)
+            localElement = ((Document) paramNode).getDocumentElement();
+        else if (paramNode.getNodeType() == 1)
+            localElement = (Element) paramNode;
+        else
+            throw new MarshalException("Signature element is not a proper Node");
+        String str = localElement.getLocalName();
+        if (str == null)
+            throw new MarshalException(
+                    "Document implementation must support DOM Level 2 and be namespace aware");
+        if (str.equals("Signature"))
+            return new it.eng.crypto.provider.dom.DOMXMLSignature(localElement,
+                    paramXMLValidateContext, getProvider());
+        throw new MarshalException("invalid Signature tag: " + str);
     }
 
     public boolean isFeatureSupported(String paramString) {
-	if (paramString == null)
-	    throw new NullPointerException();
-	return false;
+        if (paramString == null)
+            throw new NullPointerException();
+        return false;
     }
 
     public DigestMethod newDigestMethod(String paramString,
-	    DigestMethodParameterSpec paramDigestMethodParameterSpec)
-	    throws NoSuchAlgorithmException, InvalidAlgorithmParameterException {
-	if (paramString == null)
-	    throw new NullPointerException();
-	if (paramString.equals("http://www.w3.org/2000/09/xmldsig#sha1"))
-	    return new MyDOMDigestMethod.SHA1(paramDigestMethodParameterSpec);
-	if (paramString.equals("http://www.w3.org/2001/04/xmlenc#sha256"))
-	    return new MyDOMDigestMethod.SHA256(paramDigestMethodParameterSpec);
-	if (paramString.equals("http://www.w3.org/2001/04/xmldsig-more#sha384"))
-	    return new MyDOMDigestMethod.SHA384(paramDigestMethodParameterSpec);
-	if (paramString.equals("http://www.w3.org/2001/04/xmlenc#sha512"))
-	    return new MyDOMDigestMethod.SHA512(paramDigestMethodParameterSpec);
-	throw new NoSuchAlgorithmException("unsupported algorithm");
+            DigestMethodParameterSpec paramDigestMethodParameterSpec)
+            throws NoSuchAlgorithmException, InvalidAlgorithmParameterException {
+        if (paramString == null)
+            throw new NullPointerException();
+        if (paramString.equals("http://www.w3.org/2000/09/xmldsig#sha1"))
+            return new MyDOMDigestMethod.SHA1(paramDigestMethodParameterSpec);
+        if (paramString.equals("http://www.w3.org/2001/04/xmlenc#sha256"))
+            return new MyDOMDigestMethod.SHA256(paramDigestMethodParameterSpec);
+        if (paramString.equals("http://www.w3.org/2001/04/xmldsig-more#sha384"))
+            return new MyDOMDigestMethod.SHA384(paramDigestMethodParameterSpec);
+        if (paramString.equals("http://www.w3.org/2001/04/xmlenc#sha512"))
+            return new MyDOMDigestMethod.SHA512(paramDigestMethodParameterSpec);
+        throw new NoSuchAlgorithmException("unsupported algorithm");
     }
 
     public SignatureMethod newSignatureMethod(String paramString,
-	    SignatureMethodParameterSpec paramSignatureMethodParameterSpec)
-	    throws NoSuchAlgorithmException, InvalidAlgorithmParameterException {
-	if (paramString == null)
-	    throw new NullPointerException();
-	if (paramString.equals("http://www.w3.org/2000/09/xmldsig#rsa-sha1"))
-	    return new MyDOMSignatureMethod.SHA1withRSA(paramSignatureMethodParameterSpec);
-	if (paramString.equals("http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"))
-	    return new MyDOMSignatureMethod.SHA256withRSA(paramSignatureMethodParameterSpec);
-	if (paramString.equals("http://www.w3.org/2001/04/xmldsig-more#rsa-sha384"))
-	    return new MyDOMSignatureMethod.SHA384withRSA(paramSignatureMethodParameterSpec);
-	if (paramString.equals("http://www.w3.org/2001/04/xmldsig-more#rsa-sha512"))
-	    return new MyDOMSignatureMethod.SHA512withRSA(paramSignatureMethodParameterSpec);
-	if (paramString.equals("http://www.w3.org/2000/09/xmldsig#dsa-sha1"))
-	    return new MyDOMSignatureMethod.SHA1withDSA(paramSignatureMethodParameterSpec);
+            SignatureMethodParameterSpec paramSignatureMethodParameterSpec)
+            throws NoSuchAlgorithmException, InvalidAlgorithmParameterException {
+        if (paramString == null)
+            throw new NullPointerException();
+        if (paramString.equals("http://www.w3.org/2000/09/xmldsig#rsa-sha1"))
+            return new MyDOMSignatureMethod.SHA1withRSA(paramSignatureMethodParameterSpec);
+        if (paramString.equals("http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"))
+            return new MyDOMSignatureMethod.SHA256withRSA(paramSignatureMethodParameterSpec);
+        if (paramString.equals("http://www.w3.org/2001/04/xmldsig-more#rsa-sha384"))
+            return new MyDOMSignatureMethod.SHA384withRSA(paramSignatureMethodParameterSpec);
+        if (paramString.equals("http://www.w3.org/2001/04/xmldsig-more#rsa-sha512"))
+            return new MyDOMSignatureMethod.SHA512withRSA(paramSignatureMethodParameterSpec);
+        if (paramString.equals("http://www.w3.org/2000/09/xmldsig#dsa-sha1"))
+            return new MyDOMSignatureMethod.SHA1withDSA(paramSignatureMethodParameterSpec);
 
-	throw new NoSuchAlgorithmException("unsupported algorithm");
+        throw new NoSuchAlgorithmException("unsupported algorithm");
     }
 
     public Transform newTransform(String paramString,
-	    TransformParameterSpec paramTransformParameterSpec)
-	    throws NoSuchAlgorithmException, InvalidAlgorithmParameterException {
-	TransformService localTransformService;
-	try {
-	    localTransformService = TransformService.getInstance(paramString, "DOM");
-	} catch (NoSuchAlgorithmException localNoSuchAlgorithmException) {
-	    localTransformService = TransformService.getInstance(paramString, "DOM", getProvider());
-	}
-	localTransformService.init(paramTransformParameterSpec);
-	return new DOMTransform(localTransformService);
+            TransformParameterSpec paramTransformParameterSpec)
+            throws NoSuchAlgorithmException, InvalidAlgorithmParameterException {
+        TransformService localTransformService;
+        try {
+            localTransformService = TransformService.getInstance(paramString, "DOM");
+        } catch (NoSuchAlgorithmException localNoSuchAlgorithmException) {
+            localTransformService = TransformService.getInstance(paramString, "DOM", getProvider());
+        }
+        localTransformService.init(paramTransformParameterSpec);
+        return new DOMTransform(localTransformService);
     }
 
     public Transform newTransform(String paramString, XMLStructure paramXMLStructure)
-	    throws NoSuchAlgorithmException, InvalidAlgorithmParameterException {
-	TransformService localTransformService;
-	try {
-	    localTransformService = TransformService.getInstance(paramString, "DOM");
-	} catch (NoSuchAlgorithmException localNoSuchAlgorithmException) {
-	    localTransformService = TransformService.getInstance(paramString, "DOM", getProvider());
-	}
-	if (paramXMLStructure == null)
-	    localTransformService.init(null);
-	else
-	    localTransformService.init(paramXMLStructure, null);
-	return new DOMTransform(localTransformService);
+            throws NoSuchAlgorithmException, InvalidAlgorithmParameterException {
+        TransformService localTransformService;
+        try {
+            localTransformService = TransformService.getInstance(paramString, "DOM");
+        } catch (NoSuchAlgorithmException localNoSuchAlgorithmException) {
+            localTransformService = TransformService.getInstance(paramString, "DOM", getProvider());
+        }
+        if (paramXMLStructure == null)
+            localTransformService.init(null);
+        else
+            localTransformService.init(paramXMLStructure, null);
+        return new DOMTransform(localTransformService);
     }
 
     public CanonicalizationMethod newCanonicalizationMethod(String paramString,
-	    C14NMethodParameterSpec paramC14NMethodParameterSpec)
-	    throws NoSuchAlgorithmException, InvalidAlgorithmParameterException {
-	TransformService localTransformService;
-	try {
-	    localTransformService = TransformService.getInstance(paramString, "DOM");
-	} catch (NoSuchAlgorithmException localNoSuchAlgorithmException) {
-	    localTransformService = TransformService.getInstance(paramString, "DOM", getProvider());
-	}
-	localTransformService.init(paramC14NMethodParameterSpec);
-	return new DOMCanonicalizationMethod(localTransformService);
+            C14NMethodParameterSpec paramC14NMethodParameterSpec)
+            throws NoSuchAlgorithmException, InvalidAlgorithmParameterException {
+        TransformService localTransformService;
+        try {
+            localTransformService = TransformService.getInstance(paramString, "DOM");
+        } catch (NoSuchAlgorithmException localNoSuchAlgorithmException) {
+            localTransformService = TransformService.getInstance(paramString, "DOM", getProvider());
+        }
+        localTransformService.init(paramC14NMethodParameterSpec);
+        return new DOMCanonicalizationMethod(localTransformService);
     }
 
     public CanonicalizationMethod newCanonicalizationMethod(String paramString,
-	    XMLStructure paramXMLStructure)
-	    throws NoSuchAlgorithmException, InvalidAlgorithmParameterException {
-	TransformService localTransformService;
-	try {
-	    localTransformService = TransformService.getInstance(paramString, "DOM");
-	} catch (NoSuchAlgorithmException localNoSuchAlgorithmException) {
-	    localTransformService = TransformService.getInstance(paramString, "DOM", getProvider());
-	}
-	if (paramXMLStructure == null)
-	    localTransformService.init(null);
-	else
-	    localTransformService.init(paramXMLStructure, null);
-	return new DOMCanonicalizationMethod(localTransformService);
+            XMLStructure paramXMLStructure)
+            throws NoSuchAlgorithmException, InvalidAlgorithmParameterException {
+        TransformService localTransformService;
+        try {
+            localTransformService = TransformService.getInstance(paramString, "DOM");
+        } catch (NoSuchAlgorithmException localNoSuchAlgorithmException) {
+            localTransformService = TransformService.getInstance(paramString, "DOM", getProvider());
+        }
+        if (paramXMLStructure == null)
+            localTransformService.init(null);
+        else
+            localTransformService.init(paramXMLStructure, null);
+        return new DOMCanonicalizationMethod(localTransformService);
     }
 
     public URIDereferencer getURIDereferencer() {
-	return MyDOMURIDereferencer.INSTANCE;
+        return MyDOMURIDereferencer.INSTANCE;
     }
 }
 

@@ -1,50 +1,50 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>it.eng.parer</groupId>
 	<artifactId>eng-sec-provider</artifactId>
-	<version>2.0.1-SNAPSHOT</version>
+	<version>2.1.0</version>
 	<name>sec-provider</name>
 	<description>Enginnering security provider</description>
+	
 	<parent>
 		<groupId>it.eng.parer</groupId>
 		<artifactId>parer-pom</artifactId>
-		<version>7.1.2</version>
+		<version>7.2.0</version>
 	</parent>
-    
-	<scm>
-        <developerConnection>scm:git:https://github.com/RegioneER/parer-old-projects-eng-sec-provider.git</developerConnection>
-        <tag>HEAD</tag>
-    </scm>
-	
+  <scm>
+    <developerConnection>scm:git:https://github.com/RegioneER/parer-old-projects-eng-sec-provider.git</developerConnection>
+    <tag>HEAD</tag>
+  </scm>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<!-- third party libs -->
+        <bouncycastle.version>1.83</bouncycastle.version>
+        <xmlsec.version>4.0.4</xmlsec.version>
 	</properties>
 
-	
-	<distributionManagement>
-		<repository>
-		  <id>github</id>
-		  <url>https://maven.pkg.github.com/RegioneER/parer-old-projects-eng-sec-provider</url>
-		</repository>      
-	</distributionManagement>
+  <distributionManagement>
+    <repository>
+      <id>github</id>
+      <url>https://maven.pkg.github.com/RegioneER/parer-old-projects-eng-sec-provider</url>
+    </repository>
+  </distributionManagement>
 
-	<repositories>
-        <repository>
-            <id>github</id>
-            <url>https://maven.pkg.github.com/RegioneER/parer-framework-parerpom</url>
-        </repository>
-	</repositories>
+  <repositories>
+    <repository>
+      <id>github</id>
+      <url>https://maven.pkg.github.com/RegioneER/parer-framework-parerpom</url>
+    </repository>
+  </repositories>
 	
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.santuario</groupId>
 			<artifactId>xmlsec</artifactId>
-			<version>4.0.4</version>
+			<version>${xmlsec.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.bouncycastle</groupId>
 			<artifactId>bcprov-jdk18on</artifactId>
-			<version>1.82</version>
+			<version>${bouncycastle.version}</version>
 		</dependency>
 	</dependencies>
 

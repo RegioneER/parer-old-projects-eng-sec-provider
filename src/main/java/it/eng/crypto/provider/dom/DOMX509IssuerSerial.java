@@ -68,16 +68,16 @@ public final class DOMX509IssuerSerial extends DOMStructure implements X509Issue
      *                                  <code>null</code>
      */
     public DOMX509IssuerSerial(String issuerName, BigInteger serialNumber) {
-	if (issuerName == null) {
-	    throw new NullPointerException("issuerName cannot be null");
-	}
-	if (serialNumber == null) {
-	    throw new NullPointerException("serialNumber cannot be null");
-	}
-	// check that issuer distinguished name conforms to RFC 2253
-	new X500Principal(issuerName);
-	this.issuerName = issuerName;
-	this.serialNumber = serialNumber;
+        if (issuerName == null) {
+            throw new NullPointerException("issuerName cannot be null");
+        }
+        if (serialNumber == null) {
+            throw new NullPointerException("serialNumber cannot be null");
+        }
+        // check that issuer distinguished name conforms to RFC 2253
+        new X500Principal(issuerName);
+        this.issuerName = issuerName;
+        this.serialNumber = serialNumber;
     }
 
     /**
@@ -86,51 +86,51 @@ public final class DOMX509IssuerSerial extends DOMStructure implements X509Issue
      * @param isElem an X509IssuerSerial element
      */
     public DOMX509IssuerSerial(Element isElem) {
-	Element iNElem = DOMUtils.getFirstChildElement(isElem);
-	Element sNElem = DOMUtils.getNextSiblingElement(iNElem);
-	issuerName = iNElem.getFirstChild().getNodeValue();
-	serialNumber = new BigInteger(sNElem.getFirstChild().getNodeValue());
+        Element iNElem = DOMUtils.getFirstChildElement(isElem);
+        Element sNElem = DOMUtils.getNextSiblingElement(iNElem);
+        issuerName = iNElem.getFirstChild().getNodeValue();
+        serialNumber = new BigInteger(sNElem.getFirstChild().getNodeValue());
     }
 
     public String getIssuerName() {
-	return issuerName;
+        return issuerName;
     }
 
     public BigInteger getSerialNumber() {
-	return serialNumber;
+        return serialNumber;
     }
 
     public void marshal(Node parent, String dsPrefix, DOMCryptoContext context)
-	    throws MarshalException {
-	Document ownerDoc = DOMUtils.getOwnerDocument(parent);
+            throws MarshalException {
+        Document ownerDoc = DOMUtils.getOwnerDocument(parent);
 
-	Element isElem = DOMUtils.createElement(ownerDoc, "X509IssuerSerial", XMLSignature.XMLNS,
-		dsPrefix);
-	Element inElem = DOMUtils.createElement(ownerDoc, "X509IssuerName", XMLSignature.XMLNS,
-		dsPrefix);
-	Element snElem = DOMUtils.createElement(ownerDoc, "X509SerialNumber", XMLSignature.XMLNS,
-		dsPrefix);
-	inElem.appendChild(ownerDoc.createTextNode(issuerName));
-	snElem.appendChild(ownerDoc.createTextNode(serialNumber.toString()));
-	isElem.appendChild(inElem);
-	isElem.appendChild(snElem);
-	parent.appendChild(isElem);
+        Element isElem = DOMUtils.createElement(ownerDoc, "X509IssuerSerial", XMLSignature.XMLNS,
+                dsPrefix);
+        Element inElem = DOMUtils.createElement(ownerDoc, "X509IssuerName", XMLSignature.XMLNS,
+                dsPrefix);
+        Element snElem = DOMUtils.createElement(ownerDoc, "X509SerialNumber", XMLSignature.XMLNS,
+                dsPrefix);
+        inElem.appendChild(ownerDoc.createTextNode(issuerName));
+        snElem.appendChild(ownerDoc.createTextNode(serialNumber.toString()));
+        isElem.appendChild(inElem);
+        isElem.appendChild(snElem);
+        parent.appendChild(isElem);
     }
 
     public boolean equals(Object obj) {
-	if (this == obj) {
-	    return true;
-	}
-	if (!(obj instanceof X509IssuerSerial)) {
-	    return false;
-	}
-	X509IssuerSerial ois = (X509IssuerSerial) obj;
-	return (issuerName.equals(ois.getIssuerName())
-		&& serialNumber.equals(ois.getSerialNumber()));
+        if (this == obj) {
+            return true;
+        }
+        if (!(obj instanceof X509IssuerSerial)) {
+            return false;
+        }
+        X509IssuerSerial ois = (X509IssuerSerial) obj;
+        return (issuerName.equals(ois.getIssuerName())
+                && serialNumber.equals(ois.getSerialNumber()));
     }
 
     public int hashCode() {
-	assert false : "hashCode not designed";
-	return 52;
+        assert false : "hashCode not designed";
+        return 52;
     }
 }

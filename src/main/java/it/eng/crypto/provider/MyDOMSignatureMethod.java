@@ -98,12 +98,12 @@ public abstract class MyDOMSignatureMethod implements SignatureMethod {
      *                                            signature method
      */
     MyDOMSignatureMethod(AlgorithmParameterSpec params) throws InvalidAlgorithmParameterException {
-	if (params != null && !(params instanceof SignatureMethodParameterSpec)) {
-	    throw new InvalidAlgorithmParameterException(
-		    "params must be of type SignatureMethodParameterSpec");
-	}
-	checkParams((SignatureMethodParameterSpec) params);
-	this.params = (SignatureMethodParameterSpec) params;
+        if (params != null && !(params instanceof SignatureMethodParameterSpec)) {
+            throw new InvalidAlgorithmParameterException(
+                    "params must be of type SignatureMethodParameterSpec");
+        }
+        checkParams((SignatureMethodParameterSpec) params);
+        this.params = (SignatureMethodParameterSpec) params;
     }
 
     /**
@@ -114,32 +114,32 @@ public abstract class MyDOMSignatureMethod implements SignatureMethod {
      * @param smElem a SignatureMethod element
      */
     MyDOMSignatureMethod(Element smElem) throws MarshalException {
-	Element paramsElem = DOMUtils.getFirstChildElement(smElem);
-	if (paramsElem != null) {
-	    params = unmarshalParams(paramsElem);
-	}
-	try {
-	    checkParams(params);
-	} catch (InvalidAlgorithmParameterException iape) {
-	    throw new MarshalException(iape);
-	}
+        Element paramsElem = DOMUtils.getFirstChildElement(smElem);
+        if (paramsElem != null) {
+            params = unmarshalParams(paramsElem);
+        }
+        try {
+            checkParams(params);
+        } catch (InvalidAlgorithmParameterException iape) {
+            throw new MarshalException(iape);
+        }
     }
 
     static SignatureMethod unmarshal(Element smElem) throws MarshalException {
-	String alg = DOMUtils.getAttributeValue(smElem, "Algorithm");
-	if (alg.equals(SignatureMethod.RSA_SHA1)) {
-	    return new SHA1withRSA(smElem);
-	} else if (alg.equals(RSA_SHA256)) {
-	    return new SHA256withRSA(smElem);
-	} else if (alg.equals(RSA_SHA384)) {
-	    return new SHA384withRSA(smElem);
-	} else if (alg.equals(RSA_SHA512)) {
-	    return new SHA512withRSA(smElem);
-	} else if (alg.equals(SignatureMethod.DSA_SHA1)) {
-	    return new SHA1withDSA(smElem);
-	} else {
-	    throw new MarshalException("unsupported SignatureMethod algorithm: " + alg);
-	}
+        String alg = DOMUtils.getAttributeValue(smElem, "Algorithm");
+        if (alg.equals(SignatureMethod.RSA_SHA1)) {
+            return new SHA1withRSA(smElem);
+        } else if (alg.equals(RSA_SHA256)) {
+            return new SHA256withRSA(smElem);
+        } else if (alg.equals(RSA_SHA384)) {
+            return new SHA384withRSA(smElem);
+        } else if (alg.equals(RSA_SHA512)) {
+            return new SHA512withRSA(smElem);
+        } else if (alg.equals(SignatureMethod.DSA_SHA1)) {
+            return new SHA1withDSA(smElem);
+        } else {
+            throw new MarshalException("unsupported SignatureMethod algorithm: " + alg);
+        }
     }
 
     /**
@@ -153,16 +153,16 @@ public abstract class MyDOMSignatureMethod implements SignatureMethod {
      *                                            signature method
      */
     void checkParams(SignatureMethodParameterSpec params)
-	    throws InvalidAlgorithmParameterException {
-	if (params != null) {
-	    throw new InvalidAlgorithmParameterException(
-		    "no parameters " + "should be specified for the " + getSignatureAlgorithm()
-			    + " SignatureMethod algorithm");
-	}
+            throws InvalidAlgorithmParameterException {
+        if (params != null) {
+            throw new InvalidAlgorithmParameterException(
+                    "no parameters " + "should be specified for the " + getSignatureAlgorithm()
+                            + " SignatureMethod algorithm");
+        }
     }
 
     public final AlgorithmParameterSpec getParameterSpec() {
-	return params;
+        return params;
     }
 
     /**
@@ -177,8 +177,8 @@ public abstract class MyDOMSignatureMethod implements SignatureMethod {
      * @throws MarshalException if the parameters cannot be unmarshalled
      */
     SignatureMethodParameterSpec unmarshalParams(Element paramsElem) throws MarshalException {
-	throw new MarshalException("no parameters should " + "be specified for the "
-		+ getSignatureAlgorithm() + " SignatureMethod algorithm");
+        throw new MarshalException("no parameters should " + "be specified for the "
+                + getSignatureAlgorithm() + " SignatureMethod algorithm");
     }
 
     /**
@@ -186,18 +186,18 @@ public abstract class MyDOMSignatureMethod implements SignatureMethod {
      * algorithm-specific parameters.
      */
     public void marshal(Node parent, String dsPrefix, DOMCryptoContext context)
-	    throws MarshalException {
-	Document ownerDoc = DOMUtils.getOwnerDocument(parent);
+            throws MarshalException {
+        Document ownerDoc = DOMUtils.getOwnerDocument(parent);
 
-	Element smElem = DOMUtils.createElement(ownerDoc, "SignatureMethod", XMLSignature.XMLNS,
-		dsPrefix);
-	DOMUtils.setAttribute(smElem, "Algorithm", getAlgorithm());
+        Element smElem = DOMUtils.createElement(ownerDoc, "SignatureMethod", XMLSignature.XMLNS,
+                dsPrefix);
+        DOMUtils.setAttribute(smElem, "Algorithm", getAlgorithm());
 
-	if (params != null) {
-	    marshalParams(smElem, dsPrefix);
-	}
+        if (params != null) {
+            marshalParams(smElem, dsPrefix);
+        }
 
-	parent.appendChild(smElem);
+        parent.appendChild(smElem);
     }
 
     /**
@@ -220,41 +220,41 @@ public abstract class MyDOMSignatureMethod implements SignatureMethod {
      * @throws XMLSignatureException if an unexpected error occurs
      */
     boolean verify(Key key, DOMSignedInfo si, byte[] sig, XMLValidateContext context)
-	    throws InvalidKeyException, SignatureException, XMLSignatureException {
-	if (key == null || si == null || sig == null) {
-	    throw new NullPointerException();
-	}
+            throws InvalidKeyException, SignatureException, XMLSignatureException {
+        if (key == null || si == null || sig == null) {
+            throw new NullPointerException();
+        }
 
-	if (!(key instanceof PublicKey)) {
-	    throw new InvalidKeyException("key must be PublicKey");
-	}
-	if (signature == null) {
-	    try {
-		signature = Signature.getInstance(getSignatureAlgorithm());
-	    } catch (NoSuchAlgorithmException nsae) {
-		throw new XMLSignatureException(nsae);
-	    }
-	}
-	signature.initVerify((PublicKey) key);
-	// if (log.isLoggable(Level.FINE)) {
-	// log
-	// .log(Level.FINE, "Signature provider:"
-	// + signature.getProvider());
-	// log.log(Level.FINE, "verifying with key: " + key);
-	// }
-	ByteArrayOutputStream baos = new ByteArrayOutputStream();
-	si.canonicalize(context, baos);
-	signature.update(baos.toByteArray());
+        if (!(key instanceof PublicKey)) {
+            throw new InvalidKeyException("key must be PublicKey");
+        }
+        if (signature == null) {
+            try {
+                signature = Signature.getInstance(getSignatureAlgorithm());
+            } catch (NoSuchAlgorithmException nsae) {
+                throw new XMLSignatureException(nsae);
+            }
+        }
+        signature.initVerify((PublicKey) key);
+        // if (log.isLoggable(Level.FINE)) {
+        // log
+        // .log(Level.FINE, "Signature provider:"
+        // + signature.getProvider());
+        // log.log(Level.FINE, "verifying with key: " + key);
+        // }
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        si.canonicalize(context, baos);
+        signature.update(baos.toByteArray());
 
-	if (getAlgorithm().equals(SignatureMethod.DSA_SHA1)) {
-	    try {
-		return signature.verify(convertXMLDSIGtoASN1(sig));
-	    } catch (IOException ioe) {
-		throw new XMLSignatureException(ioe);
-	    }
-	} else {
-	    return signature.verify(sig);
-	}
+        if (getAlgorithm().equals(SignatureMethod.DSA_SHA1)) {
+            try {
+                return signature.verify(convertXMLDSIGtoASN1(sig));
+            } catch (IOException ioe) {
+                throw new XMLSignatureException(ioe);
+            }
+        } else {
+            return signature.verify(sig);
+        }
     }
 
     /**
@@ -273,43 +273,43 @@ public abstract class MyDOMSignatureMethod implements SignatureMethod {
      * @throws SignatureException
      */
     byte[] sign(Key key, DOMSignedInfo si, XMLSignContext context)
-	    throws InvalidKeyException, XMLSignatureException, SignatureException {
-	if (key == null || si == null) {
-	    throw new NullPointerException();
-	}
+            throws InvalidKeyException, XMLSignatureException, SignatureException {
+        if (key == null || si == null) {
+            throw new NullPointerException();
+        }
 
-	if (!(key instanceof PrivateKey)) {
-	    throw new InvalidKeyException("key must be PrivateKey");
-	}
-	if (signature == null) {
-	    try {
-		signature = Signature.getInstance(getSignatureAlgorithm());
-	    } catch (NoSuchAlgorithmException nsae) {
-		throw new XMLSignatureException(nsae);
-	    }
-	}
-	signature.initSign((PrivateKey) key);
-	// if (log.isLoggable(Level.FINE)) {
-	// log
-	// .log(Level.FINE, "Signature provider:"
-	// + signature.getProvider());
-	// log.log(Level.FINE, "Signing with key: " + key);
-	// }
-	ByteArrayOutputStream baos = new ByteArrayOutputStream();
-	si.canonicalize(context, baos);
-	signature.update(baos.toByteArray());
+        if (!(key instanceof PrivateKey)) {
+            throw new InvalidKeyException("key must be PrivateKey");
+        }
+        if (signature == null) {
+            try {
+                signature = Signature.getInstance(getSignatureAlgorithm());
+            } catch (NoSuchAlgorithmException nsae) {
+                throw new XMLSignatureException(nsae);
+            }
+        }
+        signature.initSign((PrivateKey) key);
+        // if (log.isLoggable(Level.FINE)) {
+        // log
+        // .log(Level.FINE, "Signature provider:"
+        // + signature.getProvider());
+        // log.log(Level.FINE, "Signing with key: " + key);
+        // }
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        si.canonicalize(context, baos);
+        signature.update(baos.toByteArray());
 
-	try {
-	    if (getAlgorithm().equals(SignatureMethod.DSA_SHA1)) {
-		return convertASN1toXMLDSIG(signature.sign());
-	    } else {
-		return signature.sign();
-	    }
-	} catch (SignatureException se) {
-	    throw new XMLSignatureException(se);
-	} catch (IOException ioe) {
-	    throw new XMLSignatureException(ioe);
-	}
+        try {
+            if (getAlgorithm().equals(SignatureMethod.DSA_SHA1)) {
+                return convertASN1toXMLDSIG(signature.sign());
+            } else {
+                return signature.sign();
+            }
+        } catch (SignatureException se) {
+            throw new XMLSignatureException(se);
+        } catch (IOException ioe) {
+            throw new XMLSignatureException(ioe);
+        }
     }
 
     /**
@@ -323,8 +323,8 @@ public abstract class MyDOMSignatureMethod implements SignatureMethod {
      * @throws MarshalException if the parameters cannot be marshalled
      */
     void marshalParams(Element parent, String paramsPrefix) throws MarshalException {
-	throw new MarshalException("no parameters should " + "be specified for the "
-		+ getSignatureAlgorithm() + " SignatureMethod algorithm");
+        throw new MarshalException("no parameters should " + "be specified for the "
+                + getSignatureAlgorithm() + " SignatureMethod algorithm");
     }
 
     /**
@@ -338,20 +338,20 @@ public abstract class MyDOMSignatureMethod implements SignatureMethod {
      * Subclasses should override this method to compare algorithm-specific parameters.
      */
     boolean paramsEqual(AlgorithmParameterSpec spec) {
-	return (getParameterSpec() == spec);
+        return (getParameterSpec() == spec);
     }
 
     public boolean equals(Object o) {
-	if (this == o) {
-	    return true;
-	}
+        if (this == o) {
+            return true;
+        }
 
-	if (!(o instanceof SignatureMethod)) {
-	    return false;
-	}
-	SignatureMethod osm = (SignatureMethod) o;
+        if (!(o instanceof SignatureMethod)) {
+            return false;
+        }
+        SignatureMethod osm = (SignatureMethod) o;
 
-	return (getAlgorithm().equals(osm.getAlgorithm()) && paramsEqual(osm.getParameterSpec()));
+        return (getAlgorithm().equals(osm.getAlgorithm()) && paramsEqual(osm.getParameterSpec()));
     }
 
     /**
@@ -368,30 +368,28 @@ public abstract class MyDOMSignatureMethod implements SignatureMethod {
      */
     private static byte[] convertASN1toXMLDSIG(byte asn1Bytes[]) throws IOException {
 
-	// THIS CODE IS COPIED FROM APACHE (see copyright at top of file)
-	byte rLength = asn1Bytes[3];
-	int i;
+        // THIS CODE IS COPIED FROM APACHE (see copyright at top of file)
+        byte rLength = asn1Bytes[3];
+        int i;
 
-	for (i = rLength; (i > 0) && (asn1Bytes[(4 + rLength) - i] == 0); i--)
-	    ;
+        for (i = rLength; (i > 0) && (asn1Bytes[(4 + rLength) - i] == 0); i--);
 
-	byte sLength = asn1Bytes[5 + rLength];
-	int j;
+        byte sLength = asn1Bytes[5 + rLength];
+        int j;
 
-	for (j = sLength; (j > 0) && (asn1Bytes[(6 + rLength + sLength) - j] == 0); j--)
-	    ;
+        for (j = sLength; (j > 0) && (asn1Bytes[(6 + rLength + sLength) - j] == 0); j--);
 
-	if ((asn1Bytes[0] != 48) || (asn1Bytes[1] != asn1Bytes.length - 2) || (asn1Bytes[2] != 2)
-		|| (i > 20) || (asn1Bytes[4 + rLength] != 2) || (j > 20)) {
-	    throw new IOException("Invalid ASN.1 format of DSA signature");
-	} else {
-	    byte xmldsigBytes[] = new byte[40];
+        if ((asn1Bytes[0] != 48) || (asn1Bytes[1] != asn1Bytes.length - 2) || (asn1Bytes[2] != 2)
+                || (i > 20) || (asn1Bytes[4 + rLength] != 2) || (j > 20)) {
+            throw new IOException("Invalid ASN.1 format of DSA signature");
+        } else {
+            byte xmldsigBytes[] = new byte[40];
 
-	    System.arraycopy(asn1Bytes, (4 + rLength) - i, xmldsigBytes, 20 - i, i);
-	    System.arraycopy(asn1Bytes, (6 + rLength + sLength) - j, xmldsigBytes, 40 - j, j);
+            System.arraycopy(asn1Bytes, (4 + rLength) - i, xmldsigBytes, 20 - i, i);
+            System.arraycopy(asn1Bytes, (6 + rLength + sLength) - j, xmldsigBytes, 40 - j, j);
 
-	    return xmldsigBytes;
-	}
+            return xmldsigBytes;
+        }
     }
 
     /**
@@ -408,167 +406,165 @@ public abstract class MyDOMSignatureMethod implements SignatureMethod {
      */
     private static byte[] convertXMLDSIGtoASN1(byte xmldsigBytes[]) throws IOException {
 
-	// THIS CODE IS COPIED FROM APACHE (see copyright at top of file)
-	if (xmldsigBytes.length != 40) {
-	    throw new IOException("Invalid XMLDSIG format of DSA signature");
-	}
+        // THIS CODE IS COPIED FROM APACHE (see copyright at top of file)
+        if (xmldsigBytes.length != 40) {
+            throw new IOException("Invalid XMLDSIG format of DSA signature");
+        }
 
-	int i;
+        int i;
 
-	for (i = 20; (i > 0) && (xmldsigBytes[20 - i] == 0); i--)
-	    ;
+        for (i = 20; (i > 0) && (xmldsigBytes[20 - i] == 0); i--);
 
-	int j = i;
+        int j = i;
 
-	if (xmldsigBytes[20 - i] < 0) {
-	    j += 1;
-	}
+        if (xmldsigBytes[20 - i] < 0) {
+            j += 1;
+        }
 
-	int k;
+        int k;
 
-	for (k = 20; (k > 0) && (xmldsigBytes[40 - k] == 0); k--)
-	    ;
+        for (k = 20; (k > 0) && (xmldsigBytes[40 - k] == 0); k--);
 
-	int l = k;
+        int l = k;
 
-	if (xmldsigBytes[40 - k] < 0) {
-	    l += 1;
-	}
+        if (xmldsigBytes[40 - k] < 0) {
+            l += 1;
+        }
 
-	byte asn1Bytes[] = new byte[6 + j + l];
+        byte asn1Bytes[] = new byte[6 + j + l];
 
-	asn1Bytes[0] = 48;
-	asn1Bytes[1] = (byte) (4 + j + l);
-	asn1Bytes[2] = 2;
-	asn1Bytes[3] = (byte) j;
+        asn1Bytes[0] = 48;
+        asn1Bytes[1] = (byte) (4 + j + l);
+        asn1Bytes[2] = 2;
+        asn1Bytes[3] = (byte) j;
 
-	System.arraycopy(xmldsigBytes, 20 - i, asn1Bytes, (4 + j) - i, i);
+        System.arraycopy(xmldsigBytes, 20 - i, asn1Bytes, (4 + j) - i, i);
 
-	asn1Bytes[4 + j] = 2;
-	asn1Bytes[5 + j] = (byte) l;
+        asn1Bytes[4 + j] = 2;
+        asn1Bytes[5 + j] = (byte) l;
 
-	System.arraycopy(xmldsigBytes, 40 - k, asn1Bytes, (6 + j + l) - k, k);
+        System.arraycopy(xmldsigBytes, 40 - k, asn1Bytes, (6 + j + l) - k, k);
 
-	return asn1Bytes;
+        return asn1Bytes;
     }
 
     static final class SHA1withRSA extends MyDOMSignatureMethod {
-	SHA1withRSA(AlgorithmParameterSpec params) throws InvalidAlgorithmParameterException {
-	    super(params);
-	}
+        SHA1withRSA(AlgorithmParameterSpec params) throws InvalidAlgorithmParameterException {
+            super(params);
+        }
 
-	SHA1withRSA(Element dmElem) throws MarshalException {
-	    super(dmElem);
-	}
+        SHA1withRSA(Element dmElem) throws MarshalException {
+            super(dmElem);
+        }
 
-	public String getAlgorithm() {
-	    return SignatureMethod.RSA_SHA1;
-	}
+        public String getAlgorithm() {
+            return SignatureMethod.RSA_SHA1;
+        }
 
-	String getSignatureAlgorithm() {
-	    return "SHA1withRSA";
-	}
+        String getSignatureAlgorithm() {
+            return "SHA1withRSA";
+        }
 
-	@Override
-	public boolean isFeatureSupported(String feature) {
-	    // TODO Auto-generated method stub
-	    return false;
-	}
+        @Override
+        public boolean isFeatureSupported(String feature) {
+            // TODO Auto-generated method stub
+            return false;
+        }
     }
 
     static final class SHA256withRSA extends MyDOMSignatureMethod {
-	SHA256withRSA(AlgorithmParameterSpec params) throws InvalidAlgorithmParameterException {
-	    super(params);
-	}
+        SHA256withRSA(AlgorithmParameterSpec params) throws InvalidAlgorithmParameterException {
+            super(params);
+        }
 
-	SHA256withRSA(Element dmElem) throws MarshalException {
-	    super(dmElem);
-	}
+        SHA256withRSA(Element dmElem) throws MarshalException {
+            super(dmElem);
+        }
 
-	public String getAlgorithm() {
-	    return RSA_SHA256;
-	}
+        public String getAlgorithm() {
+            return RSA_SHA256;
+        }
 
-	String getSignatureAlgorithm() {
-	    return "SHA256withRSA";
-	}
+        String getSignatureAlgorithm() {
+            return "SHA256withRSA";
+        }
 
-	@Override
-	public boolean isFeatureSupported(String feature) {
-	    // TODO Auto-generated method stub
-	    return false;
-	}
+        @Override
+        public boolean isFeatureSupported(String feature) {
+            // TODO Auto-generated method stub
+            return false;
+        }
     }
 
     static final class SHA384withRSA extends MyDOMSignatureMethod {
-	SHA384withRSA(AlgorithmParameterSpec params) throws InvalidAlgorithmParameterException {
-	    super(params);
-	}
+        SHA384withRSA(AlgorithmParameterSpec params) throws InvalidAlgorithmParameterException {
+            super(params);
+        }
 
-	SHA384withRSA(Element dmElem) throws MarshalException {
-	    super(dmElem);
-	}
+        SHA384withRSA(Element dmElem) throws MarshalException {
+            super(dmElem);
+        }
 
-	public String getAlgorithm() {
-	    return RSA_SHA384;
-	}
+        public String getAlgorithm() {
+            return RSA_SHA384;
+        }
 
-	String getSignatureAlgorithm() {
-	    return "SHA384withRSA";
-	}
+        String getSignatureAlgorithm() {
+            return "SHA384withRSA";
+        }
 
-	@Override
-	public boolean isFeatureSupported(String feature) {
-	    // TODO Auto-generated method stub
-	    return false;
-	}
+        @Override
+        public boolean isFeatureSupported(String feature) {
+            // TODO Auto-generated method stub
+            return false;
+        }
     }
 
     static final class SHA512withRSA extends MyDOMSignatureMethod {
-	SHA512withRSA(AlgorithmParameterSpec params) throws InvalidAlgorithmParameterException {
-	    super(params);
-	}
+        SHA512withRSA(AlgorithmParameterSpec params) throws InvalidAlgorithmParameterException {
+            super(params);
+        }
 
-	SHA512withRSA(Element dmElem) throws MarshalException {
-	    super(dmElem);
-	}
+        SHA512withRSA(Element dmElem) throws MarshalException {
+            super(dmElem);
+        }
 
-	public String getAlgorithm() {
-	    return RSA_SHA512;
-	}
+        public String getAlgorithm() {
+            return RSA_SHA512;
+        }
 
-	String getSignatureAlgorithm() {
-	    return "SHA512withRSA";
-	}
+        String getSignatureAlgorithm() {
+            return "SHA512withRSA";
+        }
 
-	@Override
-	public boolean isFeatureSupported(String feature) {
-	    // TODO Auto-generated method stub
-	    return false;
-	}
+        @Override
+        public boolean isFeatureSupported(String feature) {
+            // TODO Auto-generated method stub
+            return false;
+        }
     }
 
     static final class SHA1withDSA extends MyDOMSignatureMethod {
-	SHA1withDSA(AlgorithmParameterSpec params) throws InvalidAlgorithmParameterException {
-	    super(params);
-	}
+        SHA1withDSA(AlgorithmParameterSpec params) throws InvalidAlgorithmParameterException {
+            super(params);
+        }
 
-	SHA1withDSA(Element dmElem) throws MarshalException {
-	    super(dmElem);
-	}
+        SHA1withDSA(Element dmElem) throws MarshalException {
+            super(dmElem);
+        }
 
-	public String getAlgorithm() {
-	    return SignatureMethod.DSA_SHA1;
-	}
+        public String getAlgorithm() {
+            return SignatureMethod.DSA_SHA1;
+        }
 
-	String getSignatureAlgorithm() {
-	    return "SHA1withDSA";
-	}
+        String getSignatureAlgorithm() {
+            return "SHA1withDSA";
+        }
 
-	@Override
-	public boolean isFeatureSupported(String feature) {
-	    // TODO Auto-generated method stub
-	    return false;
-	}
+        @Override
+        public boolean isFeatureSupported(String feature) {
+            // TODO Auto-generated method stub
+            return false;
+        }
     }
 }

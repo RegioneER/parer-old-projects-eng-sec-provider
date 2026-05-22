@@ -1,3 +1,16 @@
+/*
+ * Engineering Ingegneria Informatica S.p.A.
+ *
+ * Copyright (C) 2023 Regione Emilia-Romagna <p/> This program is free software: you can
+ * redistribute it and/or modify it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the License, or (at your option)
+ * any later version. <p/> This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+ * PARTICULAR PURPOSE. See the GNU Affero General Public License for more details. <p/> You should
+ * have received a copy of the GNU Affero General Public License along with this program. If not,
+ * see <https://www.gnu.org/licenses/>.
+ */
+
 // Java
 package it.eng.crypto.provider;
 
@@ -9,16 +22,16 @@ public class MyMacOutputStream extends OutputStream {
     private final Mac mac;
 
     public MyMacOutputStream(Mac mac) {
-	this.mac = mac;
+        this.mac = mac;
     }
 
     @Override
     public void write(int b) throws IOException {
-	mac.update((byte) b);
+        mac.update((byte) b);
     }
 
     @Override
     public void write(byte[] b, int off, int len) throws IOException {
-	mac.update(b, off, len);
+        mac.update(b, off, len);
     }
 }

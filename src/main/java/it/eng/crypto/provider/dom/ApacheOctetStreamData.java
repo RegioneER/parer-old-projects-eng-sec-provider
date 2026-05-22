@@ -44,11 +44,11 @@ public class ApacheOctetStreamData extends OctetStreamData implements ApacheData
     private XMLSignatureInput xi;
 
     public ApacheOctetStreamData(XMLSignatureInput xi) throws IOException {
-	super(xi.getUnprocessedInput(), xi.getSourceURI(), xi.getMIMEType());
-	this.xi = xi;
+        super(xi.getUnprocessedInput(), xi.getSourceURI(), xi.getMIMEType());
+        this.xi = xi;
     }
 
     public XMLSignatureInput getXMLSignatureInput() {
-	return xi;
+        return xi;
     }
 }

@@ -56,59 +56,59 @@ public class DOMURIDereferencer implements URIDereferencer {
     static final URIDereferencer INSTANCE = new DOMURIDereferencer();
 
     private DOMURIDereferencer() {
-	// need to call org.apache.xml.security.Init.init()
-	// before calling any apache security code
-	Init.init();
+        // need to call org.apache.xml.security.Init.init()
+        // before calling any apache security code
+        Init.init();
     }
 
     public Data dereference(URIReference uriRef, XMLCryptoContext context)
-	    throws URIReferenceException {
+            throws URIReferenceException {
 
-	if (uriRef == null) {
-	    throw new NullPointerException("uriRef cannot be null");
-	}
-	if (context == null) {
-	    throw new NullPointerException("context cannot be null");
-	}
+        if (uriRef == null) {
+            throw new NullPointerException("uriRef cannot be null");
+        }
+        if (context == null) {
+            throw new NullPointerException("context cannot be null");
+        }
 
-	DOMURIReference domRef = (DOMURIReference) uriRef;
-	Attr uriAttr = (Attr) domRef.getHere();
-	String uri = uriRef.getURI();
-	DOMCryptoContext dcc = (DOMCryptoContext) context;
+        DOMURIReference domRef = (DOMURIReference) uriRef;
+        Attr uriAttr = (Attr) domRef.getHere();
+        String uri = uriRef.getURI();
+        DOMCryptoContext dcc = (DOMCryptoContext) context;
 
-	// Check if same-document URI and register ID
-	if (uri != null && uri.length() != 0 && uri.charAt(0) == '#') {
-	    String id = uri.substring(1);
+        // Check if same-document URI and register ID
+        if (uri != null && uri.length() != 0 && uri.charAt(0) == '#') {
+            String id = uri.substring(1);
 
-	    if (id.startsWith("xpointer(id(")) {
-		int i1 = id.indexOf('\'');
-		int i2 = id.indexOf('\'', i1 + 1);
-		id = id.substring(i1 + 1, i2);
-	    }
+            if (id.startsWith("xpointer(id(")) {
+                int i1 = id.indexOf('\'');
+                int i2 = id.indexOf('\'', i1 + 1);
+                id = id.substring(i1 + 1, i2);
+            }
 
-	    // this is a bit of a hack to check for registered
-	    // IDRefs and manually register them with Apache's IdResolver
-	    // map which includes builtin schema knowledge of DSig/Enc IDs
-	    Node referencedElem = dcc.getElementById(id);
-	    if (referencedElem instanceof Element) {
-		Element element = (Element) referencedElem;
-		// Mark the attribute as ID for DOM
-		element.setIdAttribute("Id", true); // Replace "Id" if your attribute name differs
-	    }
-	}
+            // this is a bit of a hack to check for registered
+            // IDRefs and manually register them with Apache's IdResolver
+            // map which includes builtin schema knowledge of DSig/Enc IDs
+            Node referencedElem = dcc.getElementById(id);
+            if (referencedElem instanceof Element) {
+                Element element = (Element) referencedElem;
+                // Mark the attribute as ID for DOM
+                element.setIdAttribute("Id", true); // Replace "Id" if your attribute name differs
+            }
+        }
 
-	try {
-	    String baseURI = context.getBaseURI();
-	    ResourceResolverContext rrcontext = new ResourceResolverContext(uriAttr, baseURI,
-		    false);
-	    XMLSignatureInput in = ResourceResolver.resolve(rrcontext);
-	    if (in.hasUnprocessedInput()) {
-		return new ApacheOctetStreamData(in);
-	    } else {
-		return new ApacheNodeSetData(in);
-	    }
-	} catch (Exception e) {
-	    throw new URIReferenceException(e);
-	}
+        try {
+            String baseURI = context.getBaseURI();
+            ResourceResolverContext rrcontext = new ResourceResolverContext(uriAttr, baseURI,
+                    false);
+            XMLSignatureInput in = ResourceResolver.resolve(rrcontext);
+            if (in.hasUnprocessedInput()) {
+                return new ApacheOctetStreamData(in);
+            } else {
+                return new ApacheNodeSetData(in);
+            }
+        } catch (Exception e) {
+            throw new URIReferenceException(e);
+        }
     }
 }

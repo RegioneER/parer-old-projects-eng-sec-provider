@@ -63,12 +63,12 @@ public final class DOMCryptoBinary extends DOMStructure {
      * @throws NullPointerException if <code>bigNum</code> is <code>null</code>
      */
     public DOMCryptoBinary(BigInteger bigNum) {
-	if (bigNum == null) {
-	    throw new NullPointerException("bigNum is null");
-	}
-	this.bigNum = bigNum;
-	// convert to bitstring
-	value = Base64.encode(bigNum);
+        if (bigNum == null) {
+            throw new NullPointerException("bigNum is null");
+        }
+        this.bigNum = bigNum;
+        // convert to bitstring
+        value = Base64.encode(bigNum);
     }
 
     /**
@@ -79,13 +79,13 @@ public final class DOMCryptoBinary extends DOMStructure {
      * @throws MarshalException if value cannot be decoded (invalid format)
      */
     public DOMCryptoBinary(Node cbNode) throws MarshalException {
-	value = cbNode.getNodeValue();
-	try {
-	    byte[] decoded = Base64.decode(value);
-	    bigNum = new BigInteger(1, decoded);
-	} catch (Exception ex) {
-	    throw new MarshalException(ex);
-	}
+        value = cbNode.getNodeValue();
+        try {
+            byte[] decoded = Base64.decode(value);
+            bigNum = new BigInteger(1, decoded);
+        } catch (Exception ex) {
+            throw new MarshalException(ex);
+        }
     }
 
     /**
@@ -94,11 +94,11 @@ public final class DOMCryptoBinary extends DOMStructure {
      * @return the <code>BigInteger</code> that this object contains
      */
     public BigInteger getBigNum() {
-	return bigNum;
+        return bigNum;
     }
 
     public void marshal(Node parent, String prefix, DOMCryptoContext context)
-	    throws MarshalException {
-	parent.appendChild(DOMUtils.getOwnerDocument(parent).createTextNode(value));
+            throws MarshalException {
+        parent.appendChild(DOMUtils.getOwnerDocument(parent).createTextNode(value));
     }
 }

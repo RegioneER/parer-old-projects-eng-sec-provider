@@ -55,8 +55,8 @@ public class DOMCanonicalizationMethod extends DOMTransform implements Canonical
      * @param spi TransformService
      */
     public DOMCanonicalizationMethod(TransformService spi)
-	    throws InvalidAlgorithmParameterException {
-	super(spi);
+            throws InvalidAlgorithmParameterException {
+        super(spi);
     }
 
     /**
@@ -67,8 +67,8 @@ public class DOMCanonicalizationMethod extends DOMTransform implements Canonical
      * @param cmElem a CanonicalizationMethod element
      */
     public DOMCanonicalizationMethod(Element cmElem, XMLCryptoContext context, Provider provider)
-	    throws MarshalException {
-	super(cmElem, context, provider);
+            throws MarshalException {
+        super(cmElem, context, provider);
     }
 
     /**
@@ -85,30 +85,30 @@ public class DOMCanonicalizationMethod extends DOMTransform implements Canonical
      * @throws TransformException   if an unexpected error occurs while canonicalizing the data
      */
     public Data canonicalize(Data data, XMLCryptoContext xc) throws TransformException {
-	return transform(data, xc);
+        return transform(data, xc);
     }
 
     public Data canonicalize(Data data, XMLCryptoContext xc, OutputStream os)
-	    throws TransformException {
-	return transform(data, xc, os);
+            throws TransformException {
+        return transform(data, xc, os);
     }
 
     public boolean equals(Object o) {
-	if (this == o) {
-	    return true;
-	}
+        if (this == o) {
+            return true;
+        }
 
-	if (!(o instanceof CanonicalizationMethod)) {
-	    return false;
-	}
-	CanonicalizationMethod ocm = (CanonicalizationMethod) o;
+        if (!(o instanceof CanonicalizationMethod)) {
+            return false;
+        }
+        CanonicalizationMethod ocm = (CanonicalizationMethod) o;
 
-	return (getAlgorithm().equals(ocm.getAlgorithm())
-		&& DOMUtils.paramsEqual(getParameterSpec(), ocm.getParameterSpec()));
+        return (getAlgorithm().equals(ocm.getAlgorithm())
+                && DOMUtils.paramsEqual(getParameterSpec(), ocm.getParameterSpec()));
     }
 
     public int hashCode() {
-	assert false : "hashCode not designed";
-	return 42;
+        assert false : "hashCode not designed";
+        return 42;
     }
 }

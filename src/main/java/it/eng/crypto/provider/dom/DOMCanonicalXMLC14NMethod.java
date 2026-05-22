@@ -51,30 +51,30 @@ import org.apache.xml.security.c14n.InvalidCanonicalizerException;
 public final class DOMCanonicalXMLC14NMethod extends ApacheCanonicalizer {
 
     public void init(TransformParameterSpec params) throws InvalidAlgorithmParameterException {
-	if (params != null) {
-	    throw new InvalidAlgorithmParameterException(
-		    "no parameters " + "should be specified for Canonical XML C14N algorithm");
-	}
+        if (params != null) {
+            throw new InvalidAlgorithmParameterException(
+                    "no parameters " + "should be specified for Canonical XML C14N algorithm");
+        }
     }
 
     public Data transform(Data data, XMLCryptoContext xc) throws TransformException {
 
-	// ignore comments if dereferencing same-document URI that requires
-	// you to omit comments, even if the Transform says otherwise -
-	// this is to be compliant with section 4.3.3.3 of W3C Rec.
-	if (data instanceof DOMSubTreeData) {
-	    DOMSubTreeData subTree = (DOMSubTreeData) data;
-	    if (subTree.excludeComments()) {
-		try {
-		    apacheCanonicalizer = Canonicalizer
-			    .getInstance(CanonicalizationMethod.INCLUSIVE);
-		} catch (InvalidCanonicalizerException ice) {
-		    throw new TransformException("Couldn't find Canonicalizer for: "
-			    + CanonicalizationMethod.INCLUSIVE + ": " + ice.getMessage(), ice);
-		}
-	    }
-	}
+        // ignore comments if dereferencing same-document URI that requires
+        // you to omit comments, even if the Transform says otherwise -
+        // this is to be compliant with section 4.3.3.3 of W3C Rec.
+        if (data instanceof DOMSubTreeData) {
+            DOMSubTreeData subTree = (DOMSubTreeData) data;
+            if (subTree.excludeComments()) {
+                try {
+                    apacheCanonicalizer = Canonicalizer
+                            .getInstance(CanonicalizationMethod.INCLUSIVE);
+                } catch (InvalidCanonicalizerException ice) {
+                    throw new TransformException("Couldn't find Canonicalizer for: "
+                            + CanonicalizationMethod.INCLUSIVE + ": " + ice.getMessage(), ice);
+                }
+            }
+        }
 
-	return canonicalize(data, xc);
+        return canonicalize(data, xc);
     }
 }
